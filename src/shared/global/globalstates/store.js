@@ -5,7 +5,7 @@ import authReducer from "./reducers/authReducer";
 
 const store = createStore(
   combineReducers({
-    posts: postReducer,
+    pts: postReducer,
     auth: authReducer,
   })
 );

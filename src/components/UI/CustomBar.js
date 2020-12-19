@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: "darkgray",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 35,
+    borderRadius: 45,
   },
   generalIconContainer: {
     height: 0,

@@ -1,23 +1,32 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
 import CustomBar from "../components/UI/CustomBar";
-import { AntDesign } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import UserPosts from "../components/userPosts/UserPosts";
+import { connect } from "react-redux";
 
-const ProfileView = () => {
+const ProfileView = ({ route, getAllPosts, navigation }) => {
+  const { item } = route.params;
+
+  const userPosts = getAllPosts.filter((post) => post.user === item.user);
+
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
         <CustomBar
-          text="Username"
-          textColor = "black"
+          text={`${item.userInfo.firstName} ${item.userInfo.lastName}`}
+          textColor="black"
           userIconHeight={70}
           userIconWidth={70}
           bgColor="white"
           height={2}
           iconBgColor="darkgray"
-          image={<AntDesign name="user" size={40} color="white" />}
+          image={
+            <Image
+              source={{ uri: item.userInfo.imageuri }}
+              style={{ width: 65, height: 65, borderRadius: 35 }}
+            />
+          }
           icon={<SimpleLineIcons name="user-follow" size={20} color="white" />}
           iconHeight={50}
           iconWidth={50}
@@ -26,7 +35,7 @@ const ProfileView = () => {
       </View>
       <View style={styles.postsContainer}>
         <View style={styles.postsInnerContainer}>
-          <UserPosts />
+          <UserPosts posts={userPosts} navigation={navigation} />
         </View>
       </View>
     </View>
@@ -49,4 +58,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileView;
+const mapStateToProps = (state) => {
+  return {
+    getAllPosts: state.pts.posts,
+  };
+};
+
+export default connect(mapStateToProps, null)(ProfileView);

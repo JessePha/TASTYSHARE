@@ -17,6 +17,8 @@ const Button = ({ text, onClick, color, backgroundColor }) => {
     style = styles.postButton;
   } else if (text === "Cancel") {
     style = styles.cancelButton;
+  } else if (text === "Change") {
+    style = styles.changeButton;
   } else {
     style = styles.appButtonText;
   }
@@ -65,7 +67,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   postButton: {
-    color: "#fff",
     fontSize: 14,
     padding: 10,
     backgroundColor: "#00C2FF",
@@ -74,8 +75,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 30,
   },
+  changeButton: {
+    fontSize: 14,
+    padding: 10,
+    backgroundColor: "#54e346",
+    textAlign: "center",
+    width: 150,
+    marginBottom: 10,
+    borderRadius: 30,
+  },
   cancelButton: {
-    color: "#fff",
     fontSize: 14,
     padding: 10,
     backgroundColor: "#00C2FF",

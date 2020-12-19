@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   textInput: {
     height: 40,
     paddingLeft: 6,
-    color: "#fff",
+    color: "black",
   },
   eyeIcon: {
     fontSize: 20,

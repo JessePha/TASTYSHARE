@@ -39,7 +39,6 @@ export const openCamera = async () => {
   }
 };
 
-
 export const prepareBlob = async (imageUri) => {
   const blob = await new Promise((resolve, reject) => {
     //new request
@@ -51,7 +50,6 @@ export const prepareBlob = async (imageUri) => {
 
     //error threw new error
     xml.onerror = function (e) {
-      console.log(e);
       reject(new TypeError("Image Upload failed"));
     };
 
@@ -61,6 +59,5 @@ export const prepareBlob = async (imageUri) => {
     //send the request
     xml.send();
   });
-
   return blob;
 };

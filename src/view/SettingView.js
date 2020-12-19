@@ -1,11 +1,12 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import CustomBar from "../components/UI/CustomBar";
 import { auth } from "../../config/config";
+import { connect } from "react-redux";
 
-const SettingView = ({ navigation }) => {
+const SettingView = ({ navigation, currentUser }) => {
   const onSignOut = async () => {
     try {
       await auth.signOut();
@@ -14,21 +15,35 @@ const SettingView = ({ navigation }) => {
       console.log(error);
     }
   };
-  
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <View style={styles.profileContainer}>
           <CustomBar
-            text="Username"
+            text={`${currentUser.firstName} ${currentUser.lastName}`}
             textColor="black"
-            userIconHeight={70}
-            userIconWidth={70}
+            userIconHeight={90}
+            userIconWidth={90}
             bgColor="white"
             height={2}
-            iconBgColor="darkgray"
-            image={<AntDesign name="user" size={40} color="white" />}
+            iconBgColor="lightgray"
+            image={
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("usersetting", { currentUser })
+                }
+              >
+                {currentUser.imageuri ? (
+                  <Image
+                    source={{ uri: currentUser.imageuri }}
+                    style={{ width: 80, height: 80, borderRadius: 40 }}
+                  />
+                ) : (
+                  <AntDesign name="user" size={40} color="white" />
+                )}
+              </TouchableOpacity>
+            }
           />
         </View>
         <View style={styles.infoContainer}>
@@ -102,6 +117,12 @@ const SettingView = ({ navigation }) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.auth.currentUser,
+  };
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -124,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingView;
+export default connect(mapStateToProps, null)(SettingView);

@@ -3,55 +3,47 @@ import { View, Image, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import CustomTextInput from "../components/UI/CustomInput";
 import CustomButton from "../components/UI/CustomButton";
-import * as cameraAndImageHelper from "../../src/helpers/handleCameraAndImage";
+import { connect } from "react-redux";
 import { useActionSheet } from "@expo/react-native-action-sheet";
+import { addImage } from "../handleCamera/handleCamera";
+import { projectFirestore } from "../../config/config";
 
-const AddPostView = ({ navigation }) => {
+const AddPostView = ({ navigation, currentUser }) => {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
-
-  const uploadImage = async (image) => {
-    setImage(image.uri);
-    const blob = await ImageHelpers.prepareBlob(image.uri);
+  const post = {
+    title: title,
+    price: price,
+    category: category,
+    description: description,
+    user: currentUser.uid,
+    imageuri: image,
   };
 
-  const openImageLibrary = async (selectedBook) => {
-    const result = await cameraAndImageHelper.openImageLibrary();
-    setImage(result.uri);
-    if (result) {
-      const downloadUrl = await uploadImage(result);
-    }
+  const resetForm = () => {
+    setImage(null);
+    setTitle("");
+    setPrice("");
+    setCategory("");
+    setDescription("");
   };
 
-  const openCamera = async (selectedBook) => {
-    const result = await cameraAndImageHelper.openCamera();
-    if (result) {
-      const downloadUrl = await uploadImage(result, selectedBook);
-    }
+  const addPost = (post) => {
+    setLoading(true);
+    projectFirestore
+      .collection("posts")
+      .add(post)
+      .then(() => {
+        setLoading(false), cancelPost(), resetForm();
+      })
+      .catch((error) => console.log(error));
   };
 
-  const addPostImage = () => {
-    const options = ["Select from Photos", "Camera", "Cancel"];
-    const cancelButtonIndex = 2;
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-      },
-      (buttonIndex) => {
-        if (buttonIndex == 0) {
-          openImageLibrary();
-        } else if (buttonIndex == 1) {
-          openCamera();
-        }
-      }
-    );
-  };
   const cancelPost = () => {
     setImage(null);
     navigation.navigate("Home");
@@ -65,7 +57,9 @@ const AddPostView = ({ navigation }) => {
     >
       <TouchableOpacity
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        onPress={() => addPostImage()}
+        onPress={() =>
+          addImage(showActionSheetWithOptions, setImage, currentUser)
+        }
       >
         <View
           style={{
@@ -110,7 +104,12 @@ const AddPostView = ({ navigation }) => {
           alignItems: "center",
         }}
       >
-        <CustomButton text="Post" color="white" backgroundColor="#00C2FF" />
+        <CustomButton
+          text="Post"
+          color="white"
+          backgroundColor="#00C2FF"
+          onClick={() => addPost(post)}
+        />
         <CustomButton
           text="Cancel"
           color="white"
@@ -122,4 +121,10 @@ const AddPostView = ({ navigation }) => {
   );
 };
 
-export default AddPostView;
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.auth.currentUser,
+  };
+};
+
+export default connect(mapStateToProps, null)(AddPostView);

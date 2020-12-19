@@ -6,38 +6,85 @@ import {
   Image,
   Dimensions,
   StyleSheet,
+  Share,
 } from "react-native";
-import UserImage from "../../UI/LinkUserImage";
-import Button from "../../UI/CustomButton";
+import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+const Post = ({ item, navigation }) => {
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          "React Native | A framework for building native apps using React",
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
-const Post = ({ texts, navigation }) => {
-  console.log(navigation);
   return (
     <>
-      <TouchableOpacity onPress={() => navigation.navigate("foodView")}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("foodView", { item })}
+      >
         <View style={styles.ImageContainer}>
-          <Image style={styles.Image} />
+          <Image source={{ uri: item.imageuri }} style={styles.Image} />
         </View>
       </TouchableOpacity>
 
       <View style={styles.UserLinkAndShareContainer}>
         <View style={styles.UserInfoContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate("userProfile")}>
-            <View
-              style={{
-                width: 40,
-                height: 40,
-                backgroundColor: "white",
-                borderRadius: 20,
-              }}
-            ></View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("userProfile", { item })}
+          >
+            {item.userInfo.imageuri ? (
+              <Image
+                source={{ uri: item.userInfo.imageuri }}
+                style={{ width: 40, height: 40, borderRadius: 20 }}
+              />
+            ) : (
+              <View
+                style={{
+                  display: "flex",
+                  width: 40,
+                  height: 40,
+                  backgroundColor: "white",
+                  borderRadius: 20,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <AntDesign size={25} color="black" />
+              </View>
+            )}
           </TouchableOpacity>
-          <Text>User</Text>
+          <Text
+            style={styles.userName}
+          >{`${item.userInfo.firstName} ${item.userInfo.lastName}`}</Text>
         </View>
         <View style={styles.UserLikeAndShare}>
-          {texts.map((text) => (
-            <Button key = {text} text={text} color="white" />
-          ))}
+          <AntDesign
+            name="like2"
+            size={20}
+            color="white"
+            onPress={() => console.log("like")}
+          />
+          <Entypo
+            name="share"
+            size={20}
+            color="white"
+            style={{ marginLeft: 5 }}
+            onPress={() => onShare()}
+          />
         </View>
       </View>
     </>
@@ -45,11 +92,6 @@ const Post = ({ texts, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  Post: {
-    borderColor: "pink",
-    borderWidth: 2,
-  },
-  ImageContainer: {},
   Image: {
     width: Dimensions.get("screen").width,
     height: 300,
@@ -61,6 +103,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  userName: { marginLeft: 10, color: "#fff" },
   UserLinkAndShareContainer: {
     flexDirection: "row",
     justifyContent: "space-between",

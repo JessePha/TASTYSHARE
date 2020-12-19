@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import SettingView from "../../view/SettingView";
-import AddPostView from "../../view/AddPostView";
+import UserSettingView from "../../view/UserSettingView";
 
 const settingStack = createStackNavigator();
 
@@ -13,6 +13,7 @@ export const SettingStack = () => {
       }}
     >
       <settingStack.Screen name="setting" component={SettingView} />
+      <settingStack.Screen name="usersetting" component={UserSettingView} />
     </settingStack.Navigator>
   );
 };

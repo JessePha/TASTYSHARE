@@ -1,21 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import Header from "../components/Header/Header";
 import Posts from "../components/Posts/Posts";
-import SettingView from "../view/SettingView";
-import LoginView from "../view/LoginView";
-import RegisterView from "../view/RegisterView";
-import ForgetPasswordView from "../view/ForgetPasswordView";
-import FoodView from "../view/FoodView";
-import ProfileView from "../view/ProfileView";
-const MainView = ({ navigation }) => {
+import { projectFirestore } from "../../config/config";
+import { connect } from "react-redux";
+import * as actionType from "../shared/global/globalstates/actions/actionTypes";
+const MainView = ({ navigation, gettAllPosts }) => {
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    const unsubscribe = projectFirestore
+      .collection("posts")
+      .onSnapshot((querySnapshot) => {
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          projectFirestore
+            .collection("users")
+            .doc(doc.data().user)
+            .get()
+            .then((user) => {
+              data.push({ ...doc.data(), userInfo: user.data() });
+              if (data.length === querySnapshot.size) {
+                setPosts(data);
+                gettAllPosts(data);
+              }
+            })
+            .catch((error) => console.log(error));
+        });
+      });
+    return unsubscribe;
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 8, backgroundColor: "#5A595B" }}>
-        <Posts navigation={navigation} />
+        {posts.length > 0 ? (
+          <Posts navigation={navigation} posts={posts} />
+        ) : null}
       </View>
     </View>
   );
 };
 
-export default MainView;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    gettAllPosts: (posts) => {
+      dispatch({ type: actionType.GET_ALL_POSTS, payload: posts });
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(MainView);

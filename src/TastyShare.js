@@ -6,11 +6,15 @@ import { auth } from "../config/config";
 import { connect } from "react-redux";
 import LoadingScreen from "./view/LoadingView";
 import { NavigationContainer } from "@react-navigation/native";
+import { projectFirestore } from "../config/config";
 const TastyShare = ({ authenticate, signIn, signOut }) => {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        signIn(user);
+        projectFirestore
+          .collection("users")
+          .doc(user.uid)
+          .onSnapshot((doc) => signIn({ ...doc.data(), uid: user.uid }));
       } else {
         signOut();
       }

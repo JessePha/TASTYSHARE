@@ -8,3 +8,20 @@ admin.initializeApp();
 //   functions.logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+
+
+// exports.createUserInDatabase = functions.auth.user().onCreate(async user => {
+//   const email = user.email;
+
+//   try {
+//     const snapshot = await admin
+//       .database()
+//       .ref('users/' + user.uid)
+//       .set({ email: email, uid: user.uid });
+//     return snapshot;
+//   } catch (error) {
+//     console.log(error);
+//     return error;
+//   }
+// });

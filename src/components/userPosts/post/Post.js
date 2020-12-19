@@ -1,25 +1,25 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, Image } from "react-native";
 
-const Post = ({ WIDTH, numColumn }) => {
+const Post = ({ item, navigation }) => {
   return (
     <>
       <TouchableOpacity
         style={styles.ImageContainer}
-        onPress={() => console.log("Go to View food")}
+        onPress={() => navigation.navigate("foodView", { item })}
       >
-        <Image style={{ ...styles.Image, height: WIDTH / numColumn }} />
+        <Image source={{ uri: item.imageuri }} style={{ ...styles.Image }} />
       </TouchableOpacity>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  ImageContainer: { flex: 1, padding: 5 },
+  ImageContainer: { flex: 1 },
   Image: {
-    height: 100,
+    width: 300,
+    height: 300,
     backgroundColor: "#C4C4C4",
-    margin: 3,
   },
 });
 
