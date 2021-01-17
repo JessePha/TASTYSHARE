@@ -16,6 +16,7 @@ const AddPostView = ({ navigation, currentUser }) => {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
+  let type = "posts";
   const post = {
     title: title,
     price: price,
@@ -37,6 +38,8 @@ const AddPostView = ({ navigation, currentUser }) => {
     setLoading(true);
     projectFirestore
       .collection("posts")
+      .doc(currentUser.uid)
+      .collection("userPosts")
       .add(post)
       .then(() => {
         setLoading(false), cancelPost(), resetForm();
@@ -58,7 +61,7 @@ const AddPostView = ({ navigation, currentUser }) => {
       <TouchableOpacity
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         onPress={() =>
-          addImage(showActionSheetWithOptions, setImage, currentUser)
+          addImage(showActionSheetWithOptions, setImage, currentUser, type)
         }
       >
         <View

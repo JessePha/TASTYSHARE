@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-const CustomLinkText = ({ text, onClick }) => {
-  
+const CustomLinkText = ({ text, onClick, textColor }) => {
+  let style = styles.linkText;
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress = {onClick}>
-        <Text style={styles.LinkText}>{text}</Text>
+      <TouchableOpacity onPress={onClick}>
+        <Text style={{ ...style, color: textColor }}>{text}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 15,
   },
-  LinkText: {
+  linkText: {
     color: "#C4C4C4",
     textAlign: "right",
   },

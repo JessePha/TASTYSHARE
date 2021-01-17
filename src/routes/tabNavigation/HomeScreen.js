@@ -1,47 +1,45 @@
-import React, { useState } from "react";
+import React from "react";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MaterialIcons } from "@expo/vector-icons";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import AddPostView from "../../view/AddPostView";
-import { HomeStack } from "../homeStack/HomeStack";
+import HomeStack from "../homeStack/HomeStack";
 import { SettingStack } from "../homeStack/SettingStack";
-
-const tabsNavigation = createBottomTabNavigator();
-const TabNavigation = ({ auth }) => {
+import { connect } from "react-redux";
+const tabsNavigation = createMaterialBottomTabNavigator();
+const TabNavigation = ({ authenticated }) => {
   return (
     <>
-      {auth ? (
+      {authenticated ? (
         <>
           <tabsNavigation.Navigator
-            tabBarOptions={{
-              activeTintColor: "#fff",
-              inactiveTintColor: "#C4C4C4",
-              style: {
-                backgroundColor: "#5A595B",
-              },
-            }}
+            initialRouteName="Home"
+            labeled={false}
+            barStyle={{ backgroundColor: "#5A595B" }}
           >
             <tabsNavigation.Screen
               name="Home"
-              component={() => <HomeStack auth={auth} />}
+              component={HomeStack}
               options={{
-                tabBarLabel: "Home",
                 tabBarIcon: () => (
-                  <Entypo
-                    name="home"
-                    size={25}
-                    color="white"
-                    inactiveTintColor="#C4C4C4"
-                  />
+                  <Entypo name="home" size={25} color="white" />
                 ),
               }}
             />
-            <tabsNavigation.Screen name="addpost" component={AddPostView} />
+            <tabsNavigation.Screen
+              name="addpost"
+              component={AddPostView}
+              options={{
+                tabBarIcon: () => (
+                  <MaterialIcons name="add-circle" size={25} color="white" />
+                ),
+              }}
+            />
             <tabsNavigation.Screen
               name="Profile"
               component={SettingStack}
               options={{
-                tabBarLabel: "Profile",
                 tabBarIcon: () => (
                   <AntDesign name="setting" size={25} color="white" />
                 ),
@@ -56,4 +54,10 @@ const TabNavigation = ({ auth }) => {
   );
 };
 
-export default TabNavigation;
+const mapStateToProps = (state) => {
+  return {
+    authenticated: state.auth.isSignedIn,
+  };
+};
+
+export default connect(mapStateToProps, null)(TabNavigation);

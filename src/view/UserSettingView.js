@@ -15,6 +15,7 @@ const UserSettingView = ({ navigation, route }) => {
   const [newName, setNewName] = useState(currentUser.firstName);
   const [newLastName, setNewLastName] = useState(currentUser.lastName);
   const [newEmail, setNewEmail] = useState(currentUser.email);
+  let type = "users"
 
   const updateUser = {
     ...currentUser,
@@ -43,7 +44,14 @@ const UserSettingView = ({ navigation, route }) => {
           text={`${currentUser.firstName} ${currentUser.lastName}`}
           image={
             <TouchableOpacity
-              onPress={() => addImage(showActionSheetWithOptions, setImage)}
+              onPress={() =>
+                addImage(
+                  showActionSheetWithOptions,
+                  setImage,
+                  currentUser,
+                  type
+                )
+              }
             >
               <AntDesign
                 name="camera"

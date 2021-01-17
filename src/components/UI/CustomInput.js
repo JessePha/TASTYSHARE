@@ -31,7 +31,7 @@ const CustomInput = ({
         placeholderTextColor="#C4C4C4"
         underlineColorAndroid="#9DE8FF"
         style={styles.textInput}
-        onChangeText={(input) => handleInput(input)}
+        onChangeText={(input) => handleInput(input.trim())}
       />
       {text === "Password" && eye}
     </View>

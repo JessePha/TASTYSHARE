@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import LoadingScreen from "./view/LoadingView";
 import { NavigationContainer } from "@react-navigation/native";
 import { projectFirestore } from "../config/config";
+import SplashScreen from "./view/SplashView";
 const TastyShare = ({ authenticate, signIn, signOut }) => {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {

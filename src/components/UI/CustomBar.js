@@ -15,6 +15,8 @@ const CustomBar = ({
   iconHeight,
   generalIconBgColor,
   generalIconColor,
+  onclick,
+  isAuth,
 }) => {
   return (
     <View
@@ -42,16 +44,20 @@ const CustomBar = ({
           flex: 1,
         }}
       >
-        <View
-          style={{
-            ...styles.generalIconContainer,
-            height: iconHeight,
-            width: iconWidth,
-            backgroundColor: generalIconBgColor,
-          }}
-        >
-          {icon}
-        </View>
+        {isAuth ? (
+          <TouchableOpacity onPress={onclick}>
+            <View
+              style={{
+                ...styles.generalIconContainer,
+                height: iconHeight,
+                width: iconWidth,
+                backgroundColor: generalIconBgColor,
+              }}
+            >
+              {icon}
+            </View>
+          </TouchableOpacity>
+        ) : null}
       </View>
     </View>
   );

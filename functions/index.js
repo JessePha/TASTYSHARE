@@ -1,15 +1,33 @@
-const functions = require("firebase-functions");
+const  functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const db = admin.firestore();
 
+exports.addLike = functions.firestore
+  .document("/posts/{creatorId}/userPosts/{postId}/likes/{userId}")
+  .onCreate((snap, context) => {
+    return db
+      .collection("posts")
+      .doc(context.params.creatorId)
+      .collection("userPosts")
+      .doc(context.params.postId)
+      .update({
+        likesCount: admin.firestore.FieldValue.increment(1),
+      });
+  });
 
+exports.removeLike = functions.firestore
+  .document("/posts/{creatorId}/userPosts/{postId}/likes/{userId}")
+  .onDelete((snap, context) => {
+    return db
+      .collection("posts")
+      .doc(context.params.creatorId)
+      .collection("userPosts")
+      .doc(context.params.postId)
+      .update({
+        likesCount: admin.firestore.FieldValue.increment(-1),
+      });
+  });
 
 // exports.createUserInDatabase = functions.auth.user().onCreate(async user => {
 //   const email = user.email;
@@ -22,6 +40,18 @@ admin.initializeApp();
 //     return snapshot;
 //   } catch (error) {
 //     console.log(error);
+//     return error;
+//   }
+// });
+
+// exports.createUser = functions.auth.user.onCreate(async (user) => {
+//   try {
+//     const snapshot = await db.collection("users").doc(user.uid).set({
+//       email: user.uid,
+//     });
+//     return snapshot;
+//   } catch (error) {
+//     console.log("AN ERROR OCCUR: ", error);
 //     return error;
 //   }
 // });

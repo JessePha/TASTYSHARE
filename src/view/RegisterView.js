@@ -34,7 +34,6 @@ const RegisterView = ({ navigation }) => {
       firstName: firstname,
       lastName: lastname,
     };
-
     if (firstname && lastname && email && password) {
       setLoading(true);
       try {
@@ -42,6 +41,11 @@ const RegisterView = ({ navigation }) => {
           email,
           password
         );
+        // if (response) {
+        //   await response.user.updateProfile({
+        //     displayName: `${firstname} ${lastname}`,
+        //   });
+        // }
         if (response) {
           setLoading(false);
           await projectFirestore
@@ -51,10 +55,9 @@ const RegisterView = ({ navigation }) => {
               ...user,
               email: response.user.email,
             });
-          navigation.navigate("Log in");
         }
       } catch (error) {
-        setState({ isLoading: false });
+        setLoading(false);
         if (error.code == "auth/email-already-in-use") {
           alert("User already exists.Try loggin in");
         }
@@ -121,6 +124,7 @@ const RegisterView = ({ navigation }) => {
         <CustomeLinkText
           text="Already have account ?"
           onClick={() => navigation.navigate("Log in")}
+          textColor="white"
         />
       </View>
     </KeyboardAvoidingView>

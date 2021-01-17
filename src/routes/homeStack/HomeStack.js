@@ -8,10 +8,11 @@ import FoodView from "../../view/FoodView";
 import ForgetPasswordView from "../../view/ForgetPasswordView";
 import LoadingScreen from "../../view/LoadingView";
 import Header from "../../components/Header/Header";
+import { connect } from "react-redux";
 
 const AuthStack = createStackNavigator();
 
-export const HomeStack = ({ auth }) => {
+const HomeStack = ({ authenticated }) => {
   return (
     <AuthStack.Navigator
       screenOptions={{
@@ -24,11 +25,11 @@ export const HomeStack = ({ auth }) => {
       <AuthStack.Screen
         name="Main"
         component={MainView}
-        options={({ navigation, route }) => ({
-          headerTitle: () =>
-            auth ? null : (
-              <Header navigation={navigation} logoSize={25} color="white" />
-            ),
+        options={({ navigation }) => ({
+          headerShown: authenticated ? false : true,
+          headerTitle: () => (
+            <Header navigation={navigation} logoSize={25} color="white" />
+          ),
         })}
       />
       <AuthStack.Screen name="Log in" component={LogInView} />
@@ -48,3 +49,11 @@ export const HomeStack = ({ auth }) => {
     </AuthStack.Navigator>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    authenticated: state.auth.isSignedIn,
+  };
+};
+
+export default connect(mapStateToProps, null)(HomeStack);

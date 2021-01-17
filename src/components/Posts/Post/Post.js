@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import {
   TouchableOpacity,
   View,
@@ -10,7 +11,8 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-const Post = ({ item, navigation }) => {
+
+const Post = ({ item, navigation, handleOnLike, likes }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -63,7 +65,7 @@ const Post = ({ item, navigation }) => {
                   alignItems: "center",
                 }}
               >
-                <AntDesign size={25} color="black" />
+                <AntDesign name="user" size={20} color="gray" />
               </View>
             )}
           </TouchableOpacity>
@@ -73,10 +75,10 @@ const Post = ({ item, navigation }) => {
         </View>
         <View style={styles.UserLikeAndShare}>
           <AntDesign
-            name="like2"
+            name={likes && likes.includes(item.postID) ? "like1" : "like2"}
             size={20}
             color="white"
-            onPress={() => console.log("like")}
+            onPress={() => handleOnLike(item.user, item.postID)}
           />
           <Entypo
             name="share"
@@ -116,4 +118,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Post;
+const mapStateToProps = (state) => {
+  return {
+    authenticated: state.auth,
+  };
+};
+
+export default connect(mapStateToProps, null)(Post);

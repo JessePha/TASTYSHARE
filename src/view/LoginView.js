@@ -36,7 +36,7 @@ const LoginView = ({ navigation }) => {
         setLoading(false);
         switch (error.code) {
           case "auth/user-not-found":
-            alert("A user with that email does not exist. Try signing Up");
+            alert("Email does not exist. Try signing Up");
             break;
           case "auth/invalid-email":
             alert("Please enter an email address");

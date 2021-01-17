@@ -8,8 +8,8 @@ const UserPosts = ({ posts, navigation }) => {
     <View style={{ flex: 1 }}>
       <FlatList
         data={posts}
+        keyExtractor={(item) => item.postID}
         renderItem={({ item }) => <Post item={item} navigation={navigation} />}
-        key={(item) => item.id}
         numColumns={numColumns}
       />
     </View>
