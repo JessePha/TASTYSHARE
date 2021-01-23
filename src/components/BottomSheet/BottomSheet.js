@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import BottomSheet from "reanimated-bottom-sheet";
-import CustomLinkText from "../UI/CustomLinkText";
 
 const bottomSheet = ({ navigation, bs, fall }) => {
   const header = () => (

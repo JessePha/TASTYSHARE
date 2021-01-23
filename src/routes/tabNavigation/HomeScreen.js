@@ -1,12 +1,12 @@
 import React from "react";
-import { Entypo } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import AddPostView from "../../view/AddPostView";
 import HomeStack from "../homeStack/HomeStack";
 import { SettingStack } from "../homeStack/SettingStack";
 import { connect } from "react-redux";
+import Entypo from "react-native-vector-icons/Entypo";
+import MatericalIcons from "react-native-vector-icons/MaterialIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 const tabsNavigation = createMaterialBottomTabNavigator();
 const TabNavigation = ({ authenticated }) => {
   return (
@@ -16,14 +16,16 @@ const TabNavigation = ({ authenticated }) => {
           <tabsNavigation.Navigator
             initialRouteName="Home"
             labeled={false}
+            activeColor="white"
+            inactiveColor="darkgray"
             barStyle={{ backgroundColor: "#5A595B" }}
           >
             <tabsNavigation.Screen
               name="Home"
               component={HomeStack}
               options={{
-                tabBarIcon: () => (
-                  <Entypo name="home" size={25} color="white" />
+                tabBarIcon: ({ color }) => (
+                  <Entypo name="home" size={20} color={color} />
                 ),
               }}
             />
@@ -31,8 +33,8 @@ const TabNavigation = ({ authenticated }) => {
               name="addpost"
               component={AddPostView}
               options={{
-                tabBarIcon: () => (
-                  <MaterialIcons name="add-circle" size={25} color="white" />
+                tabBarIcon: ({ color }) => (
+                  <MatericalIcons name="add-circle" size={25} color={color} />
                 ),
               }}
             />
@@ -40,8 +42,8 @@ const TabNavigation = ({ authenticated }) => {
               name="Profile"
               component={SettingStack}
               options={{
-                tabBarIcon: () => (
-                  <AntDesign name="setting" size={25} color="white" />
+                tabBarIcon: ({ color }) => (
+                  <AntDesign name="setting" size={20} color={color} />
                 ),
               }}
             />

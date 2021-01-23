@@ -17,6 +17,7 @@ const CustomBar = ({
   generalIconColor,
   onclick,
   isAuth,
+  isUser,
 }) => {
   return (
     <View
@@ -44,7 +45,7 @@ const CustomBar = ({
           flex: 1,
         }}
       >
-        {isAuth ? (
+        {isAuth && isUser ? (
           <TouchableOpacity onPress={onclick}>
             <View
               style={{

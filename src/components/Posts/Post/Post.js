@@ -12,7 +12,16 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
-const Post = ({ item, navigation, handleOnLike, likes }) => {
+const Post = ({
+  item,
+  navigation,
+  handleOnLike,
+  likes,
+  like,
+  setLike,
+  authenticated,
+  bs,
+}) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -78,13 +87,22 @@ const Post = ({ item, navigation, handleOnLike, likes }) => {
             name={likes && likes.includes(item.postID) ? "like1" : "like2"}
             size={20}
             color="white"
-            onPress={() => handleOnLike(item.user, item.postID)}
+            onPress={() =>
+              handleOnLike(
+                authenticated,
+                item.user,
+                item.postID,
+                like,
+                setLike,
+                bs
+              )
+            }
           />
           <Entypo
             name="share"
             size={20}
             color="white"
-            style={{ marginLeft: 5 }}
+            style={{ marginLeft: 10, marginRight: 10 }}
             onPress={() => onShare()}
           />
         </View>

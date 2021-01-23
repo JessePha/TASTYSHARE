@@ -1,19 +1,54 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, createRef } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import Post from "../components/Posts/Post/Post";
-import MapView from "react-native-maps";
-const FoodView = ({ route, navigation }) => {
+import { handleOnLike } from "../handleLikesAndFollows/handleLikes";
+import {
+  handleOnComment,
+  onDeleteComment,
+} from "../handleLikesAndFollows/handleComments";
+import Animated from "react-native-reanimated";
+import BottomSheet from "../components/BottomSheet/BottomSheet";
+import CommentBottomSheet from "../components/BottomSheet/CommentBottomSheet";
+import FoodBottomSheet from "../components/BottomSheet/FoodBottomSheet";
+import { connect } from "react-redux";
+import PostImage from "../components/UI/PostImage";
+
+const FoodView = ({ route, navigation, authenticated, likes }) => {
+  const bs = createRef();
+  const fall = new Animated.Value(1);
+
+  const bs1 = createRef();
+  const fall1 = new Animated.Value(1);
+
   const { item } = route.params;
-  const buttonTexts = ["Like", "Share"];
+  const [like, setLike] = useState(false);
+
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#5A595B" }}>
-      <View style={{ flex: 1 }}>
-        <Post item={item} texts={buttonTexts} navigation={navigation} />
-      </View>
-      <View style={styles.mapContainer}>
-        <MapView style={styles.map} />
-      </View>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <PostImage img={item.imageuri} />
+      <FoodBottomSheet
+        navigation={navigation}
+        height={Dimensions.get("window").height}
+        item={item}
+        bs={bs}
+        bs1={bs1}
+        likes={likes}
+        authenticated={authenticated}
+        handleOnLike={handleOnLike}
+        like={like}
+        setLike={setLike}
+      />
+      <BottomSheet bs={bs} fall={fall} navigation={navigation} />
+      <CommentBottomSheet
+        authenticated={authenticated}
+        navigation={navigation}
+        post={item}
+        bs={bs1}
+        fall={fall1}
+        contentType={authenticated.isSignedIn ? "comment" : "notLogin"}
+        handleOnComment={handleOnComment}
+        onDeleteComment={onDeleteComment}
+      />
     </View>
   );
 };
@@ -24,10 +59,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
   },
-  map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height / 3,
-  },
 });
 
-export default FoodView;
+const mapStateToProps = (state) => {
+  return {
+    authenticated: state.auth,
+    likes: state.auth.likes,
+  };
+};
+
+export default connect(mapStateToProps, null)(FoodView);

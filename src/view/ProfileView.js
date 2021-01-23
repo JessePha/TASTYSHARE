@@ -18,20 +18,34 @@ const ProfileView = ({
   const { item } = route.params;
   const userPosts = allPosts.filter((post) => post.user === item.user);
   const [followingState, setFollowingState] = useState(false);
+  let isUser = false;
+
+  if (authenticated.currentUser !== null) {
+    isUser = authenticated.currentUser.uid !== item.user;
+  }
+
   useEffect(() => {
-    projectFirestore
-      .collection("following")
-      .doc(authenticated.currentUser.uid)
-      .collection("userFollowing")
-      .onSnapshot((snapshot) => {
-        let following = snapshot.docs.map((doc) => {
-          const id = doc.id;
-          return id;
-        });
-        if (following.length > 0) fetchFollower(following);
-        if (following.includes(item.user)) setFollowingState(true);
-        else setFollowingState(false);
-      });
+    let unsubscribe = () => {
+      if (authenticated.isSignedIn) {
+        projectFirestore
+          .collection("following")
+          .doc(authenticated.currentUser.uid)
+          .collection("userFollowing")
+          .onSnapshot((snapshot) => {
+            let following = snapshot.docs.map((doc) => {
+              const id = doc.id;
+              return id;
+            });
+            if (following.length > 0) fetchFollower(following);
+            if (following.includes(item.user)) setFollowingState(true);
+            else setFollowingState(false);
+          });
+      }
+    };
+    unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const onFollow = () => {
@@ -84,6 +98,7 @@ const ProfileView = ({
             iconWidth={40}
             generalIconBgColor={followingState ? "tomato" : "lightgreen"}
             isAuth={authenticated.isSignedIn}
+            isUser={isUser}
             onclick={() => (followingState ? onUnfollow() : onFollow())}
           />
         }

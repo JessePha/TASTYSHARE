@@ -4,7 +4,7 @@ import { Text, StyleSheet, View } from "react-native";
 const Logo = ({ size }) => {
   return (
     <View>
-      <Text style={{ ...style.Logo, fontSize: size }}>TastyShared</Text>
+      <Text style={{ ...style.Logo, fontSize: size }}>TastyShare</Text>
     </View>
   );
 };

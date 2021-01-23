@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Post from "./Post/Post";
 import { View, FlatList } from "react-native";
-import { projectFirestore } from "../../../config/config";
+import { handleOnLike } from "../../handleLikesAndFollows/handleLikes";
 const Posts = ({
   navigation,
   posts,
@@ -13,41 +13,6 @@ const Posts = ({
   refreshing,
 }) => {
   const [like, setLike] = useState(false);
-
-  const handleOnLike = (userID, postID) => {
-    if (authenticated.isSignedIn) {
-      if (like) {
-        onDislike(userID, postID);
-      } else {
-        onLike(userID, postID);
-      }
-      setLike(!like);
-    } else {
-      bs.current.snapTo(0);
-    }
-  };
-
-  const onLike = (userID, postID) => {
-    projectFirestore
-      .collection("posts")
-      .doc(userID)
-      .collection("userPosts")
-      .doc(postID)
-      .collection("likes")
-      .doc(authenticated.currentUser.uid)
-      .set({});
-  };
-
-  const onDislike = (userID, postID) => {
-    projectFirestore
-      .collection("posts")
-      .doc(userID)
-      .collection("userPosts")
-      .doc(postID)
-      .collection("likes")
-      .doc(authenticated.currentUser.uid)
-      .delete();
-  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -64,6 +29,10 @@ const Posts = ({
               setModalVisible={setModalVisible}
               handleOnLike={handleOnLike}
               likes={likes}
+              like={like}
+              setLike={setLike}
+              bs={bs}
+              authenticated={authenticated}
             />
           )}
         />

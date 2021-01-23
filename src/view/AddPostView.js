@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { addImage } from "../handleCamera/handleCamera";
 import { projectFirestore } from "../../config/config";
+import * as firebase from "firebase/app";
 
 const AddPostView = ({ navigation, currentUser }) => {
   const [image, setImage] = useState(null);
@@ -14,6 +15,7 @@ const AddPostView = ({ navigation, currentUser }) => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
   let type = "posts";
@@ -22,8 +24,10 @@ const AddPostView = ({ navigation, currentUser }) => {
     price: price,
     category: category,
     description: description,
+    location: location,
     user: currentUser.uid,
     imageuri: image,
+    createAt: firebase.default.firestore.FieldValue.serverTimestamp(),
   };
 
   const resetForm = () => {
@@ -99,11 +103,12 @@ const AddPostView = ({ navigation, currentUser }) => {
           text="Description"
           handleInput={setDescription}
         />
+        <CustomTextInput space={20} text="Location" handleInput={setLocation} />
       </View>
       <View
         style={{
           flex: 1,
-          justifyContent: "flex-start",
+          justifyContent: "center",
           alignItems: "center",
         }}
       >

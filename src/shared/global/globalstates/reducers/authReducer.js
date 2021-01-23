@@ -6,6 +6,7 @@ const initialState = {
   currentUser: null,
   following: [],
   likes: [],
+  comments: [],
 };
 
 const auth = (state = initialState, action) => {
@@ -24,6 +25,8 @@ const auth = (state = initialState, action) => {
         isSignedIn: false,
         currentUser: null,
         isLoading: false,
+        following: [],
+        likes: [],
       };
     case actionTypes.FOLLOWING_USER:
       return {
@@ -35,6 +38,12 @@ const auth = (state = initialState, action) => {
       return {
         ...state,
         likes: likes,
+      };
+    case actionTypes.GET_COMMENTS:
+      const comments = action.payload.slice();
+      return {
+        ...state,
+        comments: comments,
       };
     default:
       return state;

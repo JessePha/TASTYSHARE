@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
-import { auth } from "../../config/config";
 const LoadingScreen = () => {
   return (
     <View style={styles.container}>

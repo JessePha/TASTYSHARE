@@ -1,5 +1,12 @@
 import React from "react";
-import { View, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
@@ -24,17 +31,23 @@ const CustomInput = ({
     />
   );
   return (
-    <View style={{ ...styles.TextInputContainer, paddingBottom: space }}>
-      <TextInput
-        secureTextEntry={showPassword}
-        placeholder={text}
-        placeholderTextColor="#C4C4C4"
-        underlineColorAndroid="#9DE8FF"
-        style={styles.textInput}
-        onChangeText={(input) => handleInput(input.trim())}
-      />
-      {text === "Password" && eye}
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ ...styles.TextInputContainer, paddingBottom: space }}>
+          <TextInput
+            secureTextEntry={showPassword}
+            placeholder={text}
+            placeholderTextColor="#C4C4C4"
+            underlineColorAndroid="#9DE8FF"
+            style={styles.textInput}
+            onChangeText={(input) => handleInput(input.trim())}
+          />
+          {text === "Password" && eye}
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

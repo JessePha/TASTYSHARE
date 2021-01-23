@@ -23,56 +23,63 @@ const MainView = ({
     const unsubscribe = async () => {
       const querySnapshot = await projectFirestore.collection("users").get();
       const data = [];
-      let getData = null;
+      let getData = [];
       querySnapshot.forEach((user) => {
-        getData = new Promise((resolve) => {
-          projectFirestore
-            .collection("posts")
-            .doc(user.id)
-            .collection("userPosts")
-            .get()
-            .then((posts) =>
-              posts.forEach((post) => {
-                resolve(
+        getData.push(
+          new Promise((resolve) => {
+            projectFirestore
+              .collection("posts")
+              .doc(user.id)
+              .collection("userPosts")
+              .get()
+              .then((posts) => {
+                posts.forEach((post) => {
                   data.push({
                     ...post.data(),
                     postID: post.id,
                     userInfo: user.data(),
-                  })
-                );
-              })
-            );
-        });
+                  });
+                });
+                resolve(data);
+              });
+          })
+        );
       });
-      getData.then(() => {
-        setRefreshing(false);
+      Promise.all(getData).then(() => {
         getAllPosts(data);
+        setRefreshing(false);
       });
     };
     unsubscribe();
-    return unsubscribe;
+    return () => unsubscribe();
   }, [refreshing]);
 
   useEffect(() => {
-    let likes = [];
-    posts.forEach((post) => {
-      projectFirestore
-        .collection("posts")
-        .doc(post.user)
-        .collection("userPosts")
-        .doc(post.postID)
-        .collection("likes")
-        .doc(authenticated.currentUser.uid)
-        .onSnapshot((snapshot) => {
-          if (snapshot.exists) {
-            likes.push(post.postID);
-            getAllLikes(likes);
-          } else {
-            likes = likes.filter((like) => like !== post.postID);
-            getAllLikes(likes);
-          }
+    const unsubscribe = () => {
+      let likes = [];
+      if (authenticated.isSignedIn) {
+        posts.forEach((post) => {
+          projectFirestore
+            .collection("posts")
+            .doc(post.user)
+            .collection("userPosts")
+            .doc(post.postID)
+            .collection("likes")
+            .doc(authenticated.currentUser.uid)
+            .onSnapshot((snapshot) => {
+              if (snapshot.exists) {
+                likes.push(post.postID);
+                getAllLikes(likes);
+              } else {
+                likes = likes.filter((like) => like !== post.postID);
+                getAllLikes(likes);
+              }
+            });
         });
-    });
+      }
+    };
+    unsubscribe();
+    return () => unsubscribe;
   }, [posts]);
 
   const onRefresh = useCallback(() => {

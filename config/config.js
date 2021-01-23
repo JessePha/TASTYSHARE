@@ -1,4 +1,4 @@
-import * as firebase from "firebase/app";
+import firebase from "firebase";
 import "firebase/storage";
 import "firebase/firestore";
 import "firebase/functions";
@@ -13,9 +13,9 @@ var firebaseConfig = {
   appId: "1:762457080442:web:6861f5d4e1205e196671c3",
 };
 // Initialize Firebase
-firebase.default.initializeApp(firebaseConfig);
-const projectStorage = firebase.default.storage();
-const projectFirestore = firebase.default.firestore();
-const auth = firebase.default.auth();
-const fc = firebase.default.functions();
+firebase.initializeApp(firebaseConfig);
+const projectStorage = firebase.storage();
+const projectFirestore = firebase.firestore();
+const auth = firebase.auth();
+const fc = firebase.functions();
 export { projectStorage, projectFirestore, auth, fc };
