@@ -1,4 +1,4 @@
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useEffect } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import { handleOnLike } from "../handleLikesAndFollows/handleLikes";
 import {
@@ -11,8 +11,9 @@ import CommentBottomSheet from "../components/BottomSheet/CommentBottomSheet";
 import FoodBottomSheet from "../components/BottomSheet/FoodBottomSheet";
 import { connect } from "react-redux";
 import PostImage from "../components/UI/PostImage";
+import { projectFirestore } from "../../config/config";
 
-const FoodView = ({ route, navigation, authenticated, likes }) => {
+const FoodView = ({ route, navigation, authenticated }) => {
   const bs = createRef();
   const fall = new Animated.Value(1);
 
@@ -22,9 +23,25 @@ const FoodView = ({ route, navigation, authenticated, likes }) => {
   const { item } = route.params;
   const [like, setLike] = useState(false);
 
+  useEffect(() => {
+    if (authenticated.currentUser) {
+      projectFirestore
+        .collection("posts")
+        .doc(item.user)
+        .collection("userPosts")
+        .doc(item.postID)
+        .collection("likes")
+        .doc(authenticated.currentUser.uid)
+        .onSnapshot((snapshot) => {
+          if (snapshot.exists) {
+            setLike(true);
+          } else setLike(false);
+        });
+    }
+  }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1 }}>
       <PostImage img={item.imageuri} />
       <FoodBottomSheet
         navigation={navigation}
@@ -32,7 +49,6 @@ const FoodView = ({ route, navigation, authenticated, likes }) => {
         item={item}
         bs={bs}
         bs1={bs1}
-        likes={likes}
         authenticated={authenticated}
         handleOnLike={handleOnLike}
         like={like}

@@ -6,7 +6,6 @@ import CustomeButton from "../components/UI/CustomButton";
 import CustomeLinkText from "../components/UI/CustomLinkText";
 import TextLogo from "../components/UI/Logo";
 import { auth, projectFirestore } from "../../config/config";
-import { cos } from "react-native-reanimated";
 
 const RegisterView = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -61,7 +60,6 @@ const RegisterView = ({ navigation }) => {
         if (error.code == "auth/email-already-in-use") {
           alert("User already exists.Try loggin in");
         }
-        console.log(error);
       }
     } else {
       alert("Please enter email and password");

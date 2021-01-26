@@ -1,12 +1,22 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { Switch, Drawer, TouchableRipple } from "react-native-paper";
+import { useTheme } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import CustomBar from "../components/UI/CustomBar";
 import { auth } from "../../config/config";
 import { connect } from "react-redux";
+import * as actionTypes from "../shared/global/globalstates/actions/actionTypes";
 
-const SettingView = ({ navigation, currentUser }) => {
+const SettingView = ({
+  navigation,
+  currentUser,
+  currentTheme,
+  changeTheme,
+}) => {
+  const { colors } = useTheme();
+
   const onSignOut = async () => {
     try {
       await auth.signOut();
@@ -22,83 +32,106 @@ const SettingView = ({ navigation, currentUser }) => {
         <View style={styles.profileContainer}>
           <CustomBar
             text={`${currentUser.firstName} ${currentUser.lastName}`}
-            textColor="black"
-            userIconHeight={90}
-            userIconWidth={90}
-            bgColor="white"
+            textColor={colors.text}
+            userIconHeight={85}
+            userIconWidth={85}
+            bgColor={colors.background}
             height={2}
-            iconBgColor="lightgray"
+            iconBgColor={colors.iconBackgroundColor}
             image={
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("usersetting", { currentUser })
-                }
-              >
-                {currentUser.imageuri ? (
-                  <Image
-                    source={{ uri: currentUser.imageuri }}
-                    style={{ width: 80, height: 80, borderRadius: 40 }}
-                  />
-                ) : (
-                  <AntDesign name="user" size={40} color="white" />
-                )}
-              </TouchableOpacity>
+              currentUser.imageuri ? (
+                <Image
+                  source={{ uri: currentUser.imageuri }}
+                  style={{ width: 80, height: 80, borderRadius: 40 }}
+                />
+              ) : (
+                <AntDesign name="user" size={40} color="white" />
+              )
             }
           />
         </View>
+        <Drawer.Section></Drawer.Section>
         <View style={styles.infoContainer}>
-          <CustomBar
-            text="Likes"
-            textColor="black"
-            bgColor="white"
-            iconBgColor="lightgreen"
-            userIconHeight={40}
-            userIconWidth={40}
-            icon={
-              <MaterialIcons
-                name="keyboard-arrow-right"
-                size={24}
-                color="black"
+          <Drawer.Section>
+            <CustomBar
+              text="Likes"
+              textColor={colors.text}
+              bgColor={colors.background}
+              iconBgColor="lightgreen"
+              userIconHeight={40}
+              userIconWidth={40}
+              icon={
+                <MaterialIcons
+                  name="keyboard-arrow-right"
+                  size={24}
+                  color="black"
+                />
+              }
+              image={
+                <AntDesign
+                  name="like2"
+                  size={20}
+                  color="white"
+                  onPress={() => console.log("go to Likes")}
+                />
+              }
+            />
+          </Drawer.Section>
+          <Drawer.Section>
+            <CustomBar
+              text="Saved"
+              textColor={colors.text}
+              bgColor={colors.background}
+              iconBgColor="lightblue"
+              userIconHeight={40}
+              userIconWidth={40}
+              icon={
+                <MaterialIcons
+                  name="keyboard-arrow-right"
+                  size={24}
+                  color="black"
+                />
+              }
+              image={
+                <AntDesign
+                  name="save"
+                  size={20}
+                  color="white"
+                  onPress={() => console.log("go to save")}
+                />
+              }
+            />
+          </Drawer.Section>
+          <Drawer.Section>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("usersetting", { currentUser })
+              }
+            >
+              <CustomBar
+                text="Setting"
+                textColor={colors.text}
+                bgColor={colors.background}
+                iconBgColor="#ff7b54"
+                userIconHeight={40}
+                userIconWidth={40}
+                icon={
+                  <MaterialIcons
+                    name="keyboard-arrow-right"
+                    size={24}
+                    color="black"
+                  />
+                }
+                image={<AntDesign name="setting" size={20} color="white" />}
               />
-            }
-            image={
-              <AntDesign
-                name="like2"
-                size={20}
-                color="white"
-                onPress={() => console.log("go to Likes")}
-              />
-            }
-          />
-          <CustomBar
-            text="Saved"
-            textColor="black"
-            bgColor="white"
-            iconBgColor="lightblue"
-            userIconHeight={40}
-            userIconWidth={40}
-            icon={
-              <MaterialIcons
-                name="keyboard-arrow-right"
-                size={24}
-                color="black"
-              />
-            }
-            image={
-              <AntDesign
-                name="save"
-                size={20}
-                color="white"
-                onPress={() => console.log("go to save")}
-              />
-            }
-          />
+            </TouchableOpacity>
+          </Drawer.Section>
         </View>
         <View style={styles.logoutContainer}>
           <CustomBar
             text="Log out"
-            textColor="black"
-            bgColor="white"
+            textColor={colors.text}
+            bgColor={colors.background}
             iconBgColor="tomato"
             userIconHeight={40}
             userIconWidth={40}
@@ -111,22 +144,25 @@ const SettingView = ({ navigation, currentUser }) => {
               />
             }
           />
+          <Drawer.Section title="preference">
+            <TouchableRipple onPress={() => changeTheme(!currentTheme)}>
+              <View style={styles.preference}>
+                <Text style={{ color: colors.text }}>Theme</Text>
+                <View pointerEvents="none">
+                  <Switch color="#00e0ff" value={currentTheme} />
+                </View>
+              </View>
+            </TouchableRipple>
+          </Drawer.Section>
         </View>
       </View>
     </View>
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    currentUser: state.auth.currentUser,
-  };
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E5E5E5",
   },
   topContainer: {
     flex: 1,
@@ -136,13 +172,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   infoContainer: {
-    flex: 2,
+    flex: 3,
     justifyContent: "center",
   },
   logoutContainer: {
     flex: 3,
     justifyContent: "flex-start",
   },
+  preference: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
 });
 
-export default connect(mapStateToProps, null)(SettingView);
+const mapStateToProps = (state) => {
+  return {
+    currentUser: state.auth.currentUser,
+    currentTheme: state.auth.theme,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeTheme: (theme) =>
+      dispatch({ type: actionTypes.CHANGE_THEME, payload: theme }),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SettingView);

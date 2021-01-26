@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { connect } from "react-redux";
+import { useTheme } from "@react-navigation/native";
 import CustomBar from "../components/UI/CustomBar";
 import UserPosts from "../components/userPosts/UserPosts";
 import { projectFirestore } from "../../config/config";
@@ -16,6 +17,7 @@ const ProfileView = ({
   fetchFollower,
 }) => {
   const { item } = route.params;
+  const { colors } = useTheme();
   const userPosts = allPosts.filter((post) => post.user === item.user);
   const [followingState, setFollowingState] = useState(false);
   let isUser = false;
@@ -25,27 +27,21 @@ const ProfileView = ({
   }
 
   useEffect(() => {
-    let unsubscribe = () => {
-      if (authenticated.isSignedIn) {
-        projectFirestore
-          .collection("following")
-          .doc(authenticated.currentUser.uid)
-          .collection("userFollowing")
-          .onSnapshot((snapshot) => {
-            let following = snapshot.docs.map((doc) => {
-              const id = doc.id;
-              return id;
-            });
-            if (following.length > 0) fetchFollower(following);
-            if (following.includes(item.user)) setFollowingState(true);
-            else setFollowingState(false);
+    if (authenticated.isSignedIn) {
+      projectFirestore
+        .collection("following")
+        .doc(authenticated.currentUser.uid)
+        .collection("userFollowing")
+        .onSnapshot((snapshot) => {
+          let following = snapshot.docs.map((doc) => {
+            const id = doc.id;
+            return id;
           });
-      }
-    };
-    unsubscribe();
-    return () => {
-      unsubscribe();
-    };
+          if (following.length > 0) fetchFollower(following);
+          if (following.includes(item.user)) setFollowingState(true);
+          else setFollowingState(false);
+        });
+    }
   }, []);
 
   const onFollow = () => {
@@ -64,19 +60,19 @@ const ProfileView = ({
       .doc(item.user)
       .delete();
   };
-
+  
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, backgroundColor: colors.background }}>
       <View style={styles.profileContainer}>
         {
           <CustomBar
             text={`${item.userInfo.firstName} ${item.userInfo.lastName}`}
-            textColor="black"
-            userIconHeight={70}
-            userIconWidth={70}
-            bgColor="white"
+            textColor={colors.text}
+            userIconHeight={60}
+            userIconWidth={60}
+            bgColor={colors.card}
             height={2}
-            iconBgColor="darkgray"
+            iconBgColor={colors.iconBackgroundColor}
             image={
               item.userInfo.imageuri ? (
                 <Image
@@ -84,7 +80,7 @@ const ProfileView = ({
                   style={{ width: 65, height: 65, borderRadius: 35 }}
                 />
               ) : (
-                <AntDesign name="user" size={30} color="white" />
+                <AntDesign name="user" size={25} color={colors.iconColor} />
               )
             }
             icon={
@@ -115,13 +111,13 @@ const ProfileView = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#5A595B",
   },
   profileContainer: {
     flex: 1,
+    marginBottom: 10
   },
   postsContainer: {
-    flex: 6,
+    flex: 7,
   },
   postsInnerContainer: {
     flex: 1,

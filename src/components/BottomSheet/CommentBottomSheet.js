@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import BottomSheet from "reanimated-bottom-sheet";
+import { useTheme } from "@react-navigation/native";
 import { projectFirestore } from "../../../config/config";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
@@ -34,6 +35,7 @@ const bottomSheet = ({
   const [users, setUsers] = useState([]);
   const [show, setShow] = useState(false);
   const [com, setCom] = useState([]);
+  const { colors } = useTheme();
   useEffect(() => {
     projectFirestore
       .collection("users")
@@ -100,7 +102,7 @@ const bottomSheet = ({
                     <Entypo
                       name="arrow-with-circle-right"
                       size={24}
-                      color="gray"
+                      color={colors.iconColor}
                       onPress={onComment}
                     />
                   ) : null}
@@ -123,13 +125,16 @@ const bottomSheet = ({
     if (contentType === "comment") {
       if (comments.length || com.length > 0) {
         return (
-          <View style={{ ...styles.comment }}>
+          <View
+            style={{ ...styles.comment, backgroundColor: colors.background }}
+          >
             <FlatList
               data={com}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <CommentBar
                   text={item.text}
+                  textColor={colors.text}
                   displayName={`${item.userInfo.firstName} ${item.userInfo.lastName}`}
                   uri={item.userInfo.imageuri}
                   userID={item.userInfo.id}
@@ -144,9 +149,11 @@ const bottomSheet = ({
         );
       } else {
         return (
-          <View style={styles.noComment}>
-            <Text style={styles.noCommentText}>No comments</Text>
-            <FontAwesome name="comment-o" size={24} color="lightgray" />
+          <View
+            style={{ ...styles.noComment, backgroundColor: colors.background }}
+          >
+            <Text style={{ color: colors.text }}>No comments</Text>
+            <FontAwesome name="comment-o" size={24} color={colors.text} />
           </View>
         );
       }
@@ -216,7 +223,6 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: "center",
-    backgroundColor: "white",
     padding: 20,
     height: 250,
   },
@@ -231,9 +237,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "white",
     height: 300,
-  },
-  noCommentText: {
-    color: "lightgray",
   },
 });
 

@@ -1,4 +1,3 @@
-import { cos } from "react-native-reanimated";
 import { projectStorage } from "../../config/config";
 import * as cameraAndImageHelper from "../helpers/cameraHelper";
 

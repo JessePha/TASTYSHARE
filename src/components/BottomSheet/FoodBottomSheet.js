@@ -8,6 +8,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 import GeoCoder from "react-native-geocoding";
 import { connect } from "react-redux";
+import { useTheme } from "@react-navigation/native";
 GeoCoder.init("AIzaSyBlcHfmNg4AXbWkHg72eX5HSCGBcSgteoQ");
 
 const FoodBottomSheet = ({
@@ -18,11 +19,11 @@ const FoodBottomSheet = ({
   item,
   like,
   setLike,
-  likes,
   handleOnLike,
   comments,
 }) => {
   const [location, setLocation] = useState();
+  const { colors } = useTheme();
   useEffect(() => {
     if (item.location) {
       GeoCoder.from(item.location).then((json) => {
@@ -38,7 +39,7 @@ const FoodBottomSheet = ({
   }, [item.location]);
 
   const header = () => (
-    <View style={styles.header}>
+    <View style={{ ...styles.header, backgroundColor: colors.background }}>
       <View style={styles.UserInfoContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate("userProfile", { item })}
@@ -54,22 +55,24 @@ const FoodBottomSheet = ({
                 display: "flex",
                 width: 40,
                 height: 40,
-                backgroundColor: "white",
+                backgroundColor: colors.iconBackgroundColor,
+                justifyContent: "center",
+                alignItems: "center",
                 borderRadius: 20,
               }}
             >
-              <AntDesign name="user" size={20} color="gray" />
+              <AntDesign name="user" size={20} color={colors.iconColor} />
             </View>
           )}
         </TouchableOpacity>
         <Text
-          style={styles.userName}
+          style={{ ...styles.userName, color: colors.text }}
         >{`${item.userInfo.firstName} ${item.userInfo.lastName}`}</Text>
       </View>
       <View style={styles.UserLikeAndComments}>
         <FontAwesome name="bookmark-o" size={20} color="gray" />
         <AntDesign
-          name={likes && likes.includes(item.postID) ? "like1" : "like2"}
+          name={like ? "like1" : "like2"}
           size={20}
           color="gray"
           style={{ marginLeft: 10 }}
@@ -103,6 +106,7 @@ const FoodBottomSheet = ({
           flexDirection: "row",
           justifyContent: "flex-end",
           alignItems: "center",
+          backgroundColor: colors.background,
           height: 40,
           padding: 5,
         }}
@@ -112,8 +116,10 @@ const FoodBottomSheet = ({
           item.likesCount ? item.likesCount : 0
         }`}</Text>
       </View>
-      <View style={{ flex: 1, padding: 15, backgroundColor: "#e8eae6" }}>
-        <Text style={{ color: "#374045" }}>
+      <View
+        style={{ flex: 1, padding: 15, backgroundColor: colors.background }}
+      >
+        <Text style={{ color: colors.text }}>
           {item.description ? item.description : "No description"}
         </Text>
       </View>
@@ -137,7 +143,7 @@ const FoodBottomSheet = ({
     <>
       <BottomSheet
         ref={bs}
-        snapPoints={["10%", "60%"]}
+        snapPoints={["20%", "60%"]}
         renderHeader={header}
         renderContent={content}
         initialPosition={"50%"} //200, 300
@@ -155,7 +161,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "white",
     shadowColor: "black",
     shadowOffset: { width: -1, height: -3 },
     shadowOpacity: 0.4,
@@ -181,7 +186,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
   },
-  userName: { marginLeft: 10, color: "black" },
+  userName: { marginLeft: 10 },
   map: {
     width: Dimensions.get("screen").width,
     height: 300,

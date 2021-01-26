@@ -1,4 +1,5 @@
 import React from "react";
+import { useTheme } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import AddPostView from "../../view/AddPostView";
 import HomeStack from "../homeStack/HomeStack";
@@ -9,6 +10,7 @@ import MatericalIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 const tabsNavigation = createMaterialBottomTabNavigator();
 const TabNavigation = ({ authenticated }) => {
+  const { colors } = useTheme();
   return (
     <>
       {authenticated ? (
@@ -16,9 +18,9 @@ const TabNavigation = ({ authenticated }) => {
           <tabsNavigation.Navigator
             initialRouteName="Home"
             labeled={false}
-            activeColor="white"
+            activeColor={colors.text}
             inactiveColor="darkgray"
-            barStyle={{ backgroundColor: "#5A595B" }}
+            barStyle={{ backgroundColor: colors.background }}
           >
             <tabsNavigation.Screen
               name="Home"

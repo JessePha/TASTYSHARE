@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Image, TouchableOpacity } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import CustomTextInput from "../components/UI/CustomInput";
 import CustomButton from "../components/UI/CustomButton";
@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { addImage } from "../handleCamera/handleCamera";
 import { projectFirestore } from "../../config/config";
+import { useTheme } from "@react-navigation/native";
 import * as firebase from "firebase/app";
 
 const AddPostView = ({ navigation, currentUser }) => {
@@ -19,6 +20,7 @@ const AddPostView = ({ navigation, currentUser }) => {
   const [loading, setLoading] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
   let type = "posts";
+  const { colors } = useTheme();
   const post = {
     title: title,
     price: price,
@@ -56,62 +58,60 @@ const AddPostView = ({ navigation, currentUser }) => {
     navigation.navigate("Home");
   };
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#5A595B",
-      }}
-    >
+    <View style={styles.container}>
       <TouchableOpacity
-        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        style={styles.imageContainer}
         onPress={() =>
           addImage(showActionSheetWithOptions, setImage, currentUser, type)
         }
       >
         <View
           style={{
-            width: 200,
-            height: 200,
-            backgroundColor: "darkgray",
-            justifyContent: "center",
-            alignItems: "center",
-            borderColor: "white",
-            borderWidth: 5,
-            borderRadius: 5,
+            ...styles.imageInnerContainer,
+            backgroundColor: colors.iconBackgroundColor,
+            borderColor: colors.border,
           }}
         >
           {image ? (
-            <Image source={{ uri: image, width: 190, height: 190 }} />
+            <Image source={{ uri: image, width: 140, height: 140 }} />
           ) : (
-            <AntDesign name="camera" color="white" size={50} />
+            <AntDesign name="camera" color={colors.iconColor} size={50} />
           )}
         </View>
       </TouchableOpacity>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          paddingLeft: 20,
-          paddingRight: 20,
-        }}
-      >
-        <CustomTextInput space={20} text="Title" handleInput={setTitle} />
-        <CustomTextInput space={20} text="Price" handleInput={setPrice} />
-        <CustomTextInput space={20} text="Category" handleInput={setCategory} />
+      <View style={styles.inputContainer}>
+        <CustomTextInput
+          space={20}
+          text="Title"
+          handleInput={setTitle}
+          textColor={colors.text}
+        />
+        <CustomTextInput
+          space={20}
+          text="Price"
+          handleInput={setPrice}
+          textColor={colors.text}
+        />
+        <CustomTextInput
+          space={20}
+          text="Category"
+          handleInput={setCategory}
+          textColor={colors.text}
+        />
         <CustomTextInput
           space={20}
           text="Description"
           handleInput={setDescription}
+          textColor={colors.text}
         />
-        <CustomTextInput space={20} text="Location" handleInput={setLocation} />
+        <CustomTextInput
+          space={20}
+          text="Location"
+          handleInput={setLocation}
+          textColor={colors.text}
+        />
       </View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <View style={styles.buttonContainer}>
         <CustomButton
           text="Post"
           color="white"
@@ -128,6 +128,32 @@ const AddPostView = ({ navigation, currentUser }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  imageContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  imageInnerContainer: {
+    width: 150,
+    height: 150,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 5,
+    borderRadius: 5,
+  },
+  inputContainer: {
+    flex: 1,
+    justifyContent: "center",
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 const mapStateToProps = (state) => {
   return {

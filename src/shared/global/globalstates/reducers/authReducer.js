@@ -7,6 +7,8 @@ const initialState = {
   following: [],
   likes: [],
   comments: [],
+  theme: false,
+  refresh: false,
 };
 
 const auth = (state = initialState, action) => {
@@ -44,6 +46,16 @@ const auth = (state = initialState, action) => {
       return {
         ...state,
         comments: comments,
+      };
+    case actionTypes.CHANGE_THEME:
+      return {
+        ...state,
+        theme: action.payload,
+      };
+    case actionTypes.ON_REFRESH:
+      return {
+        ...state,
+        refresh: action.payload,
       };
     default:
       return state;

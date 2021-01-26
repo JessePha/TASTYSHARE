@@ -10,7 +10,6 @@ import Animated from "react-native-reanimated";
 const MainView = ({
   navigation,
   getAllPosts,
-  getAllLikes,
   posts,
   likes,
   authenticated,
@@ -54,41 +53,13 @@ const MainView = ({
     return () => unsubscribe();
   }, [refreshing]);
 
-  useEffect(() => {
-    const unsubscribe = () => {
-      let likes = [];
-      if (authenticated.isSignedIn) {
-        posts.forEach((post) => {
-          projectFirestore
-            .collection("posts")
-            .doc(post.user)
-            .collection("userPosts")
-            .doc(post.postID)
-            .collection("likes")
-            .doc(authenticated.currentUser.uid)
-            .onSnapshot((snapshot) => {
-              if (snapshot.exists) {
-                likes.push(post.postID);
-                getAllLikes(likes);
-              } else {
-                likes = likes.filter((like) => like !== post.postID);
-                getAllLikes(likes);
-              }
-            });
-        });
-      }
-    };
-    unsubscribe();
-    return () => unsubscribe;
-  }, [posts]);
-
   const onRefresh = useCallback(() => {
     setRefreshing(true);
   }, [refreshing]);
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flex: 8, backgroundColor: "#5A595B" }}>
+      <View style={{ flex: 8}}>
         {posts && (
           <Posts
             navigation={navigation}

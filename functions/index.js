@@ -1,4 +1,4 @@
-const  functions = require("firebase-functions");
+const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
@@ -28,21 +28,6 @@ exports.removeLike = functions.firestore
         likesCount: admin.firestore.FieldValue.increment(-1),
       });
   });
-
-// exports.createUserInDatabase = functions.auth.user().onCreate(async user => {
-//   const email = user.email;
-
-//   try {
-//     const snapshot = await admin
-//       .database()
-//       .ref('users/' + user.uid)
-//       .set({ email: email, uid: user.uid });
-//     return snapshot;
-//   } catch (error) {
-//     console.log(error);
-//     return error;
-//   }
-// });
 
 // exports.createUser = functions.auth.user.onCreate(async (user) => {
 //   try {

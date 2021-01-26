@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { useTheme } from "@react-navigation/native";
 import UserCustomBar from "../components/UI/UserCustomBar";
 import CustomInput from "../components/UI/CustomInput";
 import CustomButton from "../components/UI/CustomButton";
@@ -15,8 +16,8 @@ const UserSettingView = ({ navigation, route }) => {
   const [newName, setNewName] = useState(currentUser.firstName);
   const [newLastName, setNewLastName] = useState(currentUser.lastName);
   const [newEmail, setNewEmail] = useState(currentUser.email);
-  let type = "users"
-
+  let type = "users";
+  const { colors } = useTheme();
   const updateUser = {
     ...currentUser,
     firstName: newName,
@@ -42,6 +43,8 @@ const UserSettingView = ({ navigation, route }) => {
       <View style={styles.userSettingViewInnerContainer}>
         <UserCustomBar
           text={`${currentUser.firstName} ${currentUser.lastName}`}
+          textColor={colors.text}
+          bgColor={colors.iconBackgroundColor}
           image={
             <TouchableOpacity
               onPress={() =>

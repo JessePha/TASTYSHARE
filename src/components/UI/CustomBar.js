@@ -14,7 +14,6 @@ const CustomBar = ({
   iconWidth,
   iconHeight,
   generalIconBgColor,
-  generalIconColor,
   onclick,
   isAuth,
   isUser,

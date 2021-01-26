@@ -1,25 +1,66 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Text,
+  Modal,
+} from "react-native";
 import CustomText from "../components/UI/CustomText";
 import CustomInput from "../components/UI/CustomInput";
 import CustomButton from "../components/UI/CustomButton";
+import { auth } from "../../config/config";
 
-const ForgetPasswordView = () => {
+const ForgetPasswordView = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handlePasswordReset = async (userEmail) => {
+    auth
+      .sendPasswordResetEmail(userEmail)
+      .then(() => {
+        setMessage("The has sent to your email");
+        navigation.navigate("Log in");
+      })
+      .catch((error) => {
+        setMessage("Invalid email");
+      });
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.textContainer}>
-        <CustomText text="Find your account" />
-      </View>
-      <View style={styles.inputAndButtonContainer}>
-        <CustomInput text="Email address" space={40} />
-        <CustomButton text="Send" color="#fff" backgroundColor="#00C2FF" />
-      </View>
-    </View>
+    <KeyboardAvoidingView style={styles.container} enabled>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.innerContainer}>
+          <View style={styles.textContainer}>
+            <CustomText text="Find your account" />
+          </View>
+          <View style={styles.inputAndButtonContainer}>
+            <CustomInput
+              text="Email address"
+              space={40}
+              handleInput={setEmail}
+            />
+            <Text style={{ color: "tomato" }}>{message}</Text>
+            <CustomButton
+              text="Send"
+              color="#fff"
+              backgroundColor="#00C2FF"
+              onClick={() => handlePasswordReset(email)}
+            />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  innerContainer: {
     display: "flex",
     flex: 1,
     backgroundColor: "#5A595B",

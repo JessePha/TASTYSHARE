@@ -50,7 +50,10 @@ const LoginView = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <View style={styles.logoContainer}>
         <Logo size={30} />
       </View>
@@ -82,6 +85,7 @@ const LoginView = ({ navigation }) => {
         <CustomLinkText
           text="Forget password?"
           onClick={() => navigation.navigate("forgetPassword")}
+          textColor="#C4C4C4"
         />
       </View>
       <View style={styles.signUpContainer}>

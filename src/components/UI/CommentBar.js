@@ -6,6 +6,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CommentBar = ({
   text,
+  textColor,
   displayName,
   uri,
   userID,
@@ -39,11 +40,13 @@ const CommentBar = ({
               alignItems: "center",
             }}
           >
-            <AntDesign name="user" size={20} color="white" />
+            <AntDesign name="user" size={15} color="white" />
           </View>
         )}
         <View>
-          <Text style={styles.displayName}>{displayName}</Text>
+          <Text style={{ ...styles.displayName, color: textColor }}>
+            {displayName}
+          </Text>
         </View>
       </View>
       <View style={styles.textContainer}>
