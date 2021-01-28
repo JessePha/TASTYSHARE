@@ -4,7 +4,7 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
 import CustomBar from "../components/UI/CustomBar";
-import UserPosts from "../components/userPosts/UserPosts";
+import ViewUserPosts from "../components/userPosts/ViewUserPosts";
 import { projectFirestore } from "../../config/config";
 import * as actionTypes from "../shared/global/globalstates/actions/actionTypes";
 import { AntDesign } from "@expo/vector-icons";
@@ -27,22 +27,26 @@ const ProfileView = ({
   }
 
   useEffect(() => {
-    if (authenticated.isSignedIn) {
-      projectFirestore
-        .collection("following")
-        .doc(authenticated.currentUser.uid)
-        .collection("userFollowing")
-        .onSnapshot((snapshot) => {
-          let following = snapshot.docs.map((doc) => {
-            const id = doc.id;
-            return id;
+    const unsubscribe = () => {
+      if (authenticated.isSignedIn) {
+        projectFirestore
+          .collection("following")
+          .doc(authenticated.currentUser.uid)
+          .collection("userFollowing")
+          .onSnapshot((snapshot) => {
+            let following = snapshot.docs.map((doc) => {
+              const id = doc.id;
+              return id;
+            });
+            if (following.length > 0) fetchFollower(following);
+            if (following.includes(item.user)) setFollowingState(true);
+            else setFollowingState(false);
           });
-          if (following.length > 0) fetchFollower(following);
-          if (following.includes(item.user)) setFollowingState(true);
-          else setFollowingState(false);
-        });
-    }
-  }, []);
+      }
+    };
+    unsubscribe();
+    return () => unsubscribe();
+  }, [followingState]);
 
   const onFollow = () => {
     projectFirestore
@@ -60,7 +64,7 @@ const ProfileView = ({
       .doc(item.user)
       .delete();
   };
-  
+
   return (
     <View style={{ ...styles.container, backgroundColor: colors.background }}>
       <View style={styles.profileContainer}>
@@ -101,7 +105,7 @@ const ProfileView = ({
       </View>
       <View style={styles.postsContainer}>
         <View style={styles.postsInnerContainer}>
-          <UserPosts posts={userPosts} navigation={navigation} />
+          <ViewUserPosts posts={userPosts} navigation={navigation} />
         </View>
       </View>
     </View>
@@ -114,7 +118,7 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     flex: 1,
-    marginBottom: 10
+    marginBottom: 10,
   },
   postsContainer: {
     flex: 7,

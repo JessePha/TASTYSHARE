@@ -38,7 +38,7 @@ const FoodView = ({ route, navigation, authenticated }) => {
           } else setLike(false);
         });
     }
-  }, []);
+  }, [like]);
 
   return (
     <View style={{ flex: 1 }}>

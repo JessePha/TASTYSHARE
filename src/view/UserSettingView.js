@@ -58,8 +58,8 @@ const UserSettingView = ({ navigation, route }) => {
             >
               <AntDesign
                 name="camera"
-                size={40}
-                color="#393e46"
+                size={35}
+                color={colors.iconColor}
                 style={styles.camera}
               />
               {image || currentUser.imageuri ? (
@@ -68,7 +68,7 @@ const UserSettingView = ({ navigation, route }) => {
                   style={styles.image}
                 />
               ) : (
-                <AntDesign name="user" size={70} color="white" />
+                <AntDesign name="user" size={70} color={colors.iconColor} />
               )}
             </TouchableOpacity>
           }
@@ -122,8 +122,8 @@ const styles = StyleSheet.create({
   },
   camera: {
     position: "absolute",
-    marginLeft: 80,
-    top: 20,
+    top: 5,
+    marginLeft: 60
   },
 });
 

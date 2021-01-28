@@ -29,11 +29,9 @@ const bottomSheet = ({
   handleOnComment,
   onDeleteComment,
   getComments,
-  comments,
 }) => {
   const [text, setText] = useState();
   const [users, setUsers] = useState([]);
-  const [show, setShow] = useState(false);
   const [com, setCom] = useState([]);
   const { colors } = useTheme();
   useEffect(() => {
@@ -52,27 +50,29 @@ const bottomSheet = ({
 
   useEffect(() => {
     const unsubscribe = () => {
-      projectFirestore
-        .collection("posts")
-        .doc(post.user)
-        .collection("userPosts")
-        .doc(post.postID)
-        .collection("comments")
-        .onSnapshot((snapshot) => {
-          const comments = [];
-          snapshot.docs.forEach((doc) => {
-            const data = doc.data();
-            const id = doc.id;
-            users.map((user) => {
-              if (user.id === data.creator) {
-                user = { userInfo: { ...user }, ...data, id };
-                comments.push(user);
-              }
+      if (users.length > 0) {
+        projectFirestore
+          .collection("posts")
+          .doc(post.user)
+          .collection("userPosts")
+          .doc(post.postID)
+          .collection("comments")
+          .onSnapshot((snapshot) => {
+            const comments = [];
+            snapshot.docs.forEach((doc) => {
+              const data = doc.data();
+              const id = doc.id;
+              users.map((user) => {
+                if (user.id === data.creator) {
+                  user = { userInfo: { ...user }, ...data, id };
+                  comments.push(user);
+                }
+              });
             });
+            setCom(comments);
+            getComments(comments);
           });
-          setCom(comments);
-          getComments(comments);
-        });
+      }
     };
     unsubscribe();
   }, [users]);
@@ -83,7 +83,9 @@ const bottomSheet = ({
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.header}>
+            <View
+              style={{ ...styles.header, backgroundColor: colors.background }}
+            >
               <View>
                 <View
                   style={{
@@ -95,17 +97,17 @@ const bottomSheet = ({
                   <TextInput
                     placeholder="Write a comment"
                     value={text}
-                    onChangeText={(input) => onType(input)}
+                    onChangeText={(input) => setText(input)}
+                    placeholderTextColor="#C4C4C4"
+                    style={{ color: colors.text }}
                     clearButtonMode="always"
                   ></TextInput>
-                  {show ? (
-                    <Entypo
-                      name="arrow-with-circle-right"
-                      size={24}
-                      color={colors.iconColor}
-                      onPress={onComment}
-                    />
-                  ) : null}
+                  <Entypo
+                    name="arrow-with-circle-right"
+                    size={24}
+                    color={colors.iconColor}
+                    onPress={onComment}
+                  />
                 </View>
               </View>
             </View>
@@ -123,7 +125,7 @@ const bottomSheet = ({
   };
   const content = () => {
     if (contentType === "comment") {
-      if (comments.length || com.length > 0) {
+      if (com.length > 0) {
         return (
           <View
             style={{ ...styles.comment, backgroundColor: colors.background }}
@@ -177,14 +179,10 @@ const bottomSheet = ({
   };
 
   const onComment = () => {
-    handleOnComment(authenticated, post.user, post.postID, bs, text);
+    if (text !== "") {
+      handleOnComment(authenticated, post.user, post.postID, bs, text);
+    }
     bs.current.snapTo(1);
-  };
-
-  const onType = (input) => {
-    setText(input);
-    if (text === "") setShow(false);
-    else setShow(true);
   };
 
   return (
@@ -204,7 +202,6 @@ const bottomSheet = ({
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "white",
     shadowColor: "black",
     shadowOffset: { width: -1, height: -3 },
     shadowRadius: 2,

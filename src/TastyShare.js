@@ -21,10 +21,7 @@ const TastyShare = ({
   signIn,
   signOut,
   isDarkTheme,
-  getAllPosts,
 }) => {
-  const [refreshing, setRefreshing] = useState(false);
-
   const CustomDefaultTheme = {
     ...NavigationDefaultTheme,
     ...PaperDefaultTheme,
@@ -58,52 +55,21 @@ const TastyShare = ({
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        projectFirestore
-          .collection("users")
-          .doc(user.uid)
-          .onSnapshot((doc) => signIn({ ...doc.data(), uid: user.uid }));
-      } else {
-        signOut();
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = async () => {
-      const querySnapshot = await projectFirestore.collection("users").get();
-      const data = [];
-      let getData = [];
-      querySnapshot.forEach((user) => {
-        getData.push(
-          new Promise((resolve) => {
-            projectFirestore
-              .collection("posts")
-              .doc(user.id)
-              .collection("userPosts")
-              .get()
-              .then((posts) => {
-                posts.forEach((post) => {
-                  data.push({
-                    ...post.data(),
-                    postID: post.id,
-                    userInfo: user.data(),
-                  });
-                });
-                resolve(data);
-              });
-          })
-        );
-      });
-      Promise.all(getData).then(() => {
-        getAllPosts(data);
-        setRefreshing(false);
+    const unsubscribe = () => {
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          projectFirestore
+            .collection("users")
+            .doc(user.uid)
+            .onSnapshot((doc) => signIn({ ...doc.data(), uid: user.uid }));
+        } else {
+          signOut();
+        }
       });
     };
     unsubscribe();
     return () => unsubscribe();
-  }, [refreshing]);
+  }, []);
 
   if (authenticated.isLoading) {
     return <LoadingScreen />;
@@ -111,7 +77,7 @@ const TastyShare = ({
 
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer theme={theme}>
+      <NavigationContainer theme={theme} >
         <HomeScreen auth={authenticated.isSignedIn} />
       </NavigationContainer>
     </PaperProvider>
@@ -122,7 +88,6 @@ const mapStateToProps = (state) => {
   return {
     authenticated: state.auth,
     isDarkTheme: state.auth.theme,
-    posts: state.pts.posts,
   };
 };
 
@@ -131,9 +96,6 @@ const mapDispatchToProps = (dispatch) => {
     signIn: (user) => dispatch({ type: actionType.SIGN_IN, payload: user }),
     signOut: () => dispatch({ type: actionType.SIGN_OUT }),
     changeTheme: () => dispatch({ type: actionType.CHANGE_THEME, payload }),
-    getAllPosts: (posts) => {
-      dispatch({ type: actionType.GET_ALL_POSTS, payload: posts });
-    },
   };
 };
 

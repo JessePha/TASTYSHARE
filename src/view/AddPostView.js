@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import CustomTextInput from "../components/UI/CustomInput";
 import CustomButton from "../components/UI/CustomButton";
@@ -8,7 +16,7 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { addImage } from "../handleCamera/handleCamera";
 import { projectFirestore } from "../../config/config";
 import { useTheme } from "@react-navigation/native";
-import * as firebase from "firebase/app";
+import firebase from "firebase";
 
 const AddPostView = ({ navigation, currentUser }) => {
   const [image, setImage] = useState(null);
@@ -22,14 +30,15 @@ const AddPostView = ({ navigation, currentUser }) => {
   let type = "posts";
   const { colors } = useTheme();
   const post = {
-    title: title,
-    price: price,
-    category: category,
-    description: description,
-    location: location,
+    title: title.trim(),
+    price: price.trim(),
+    category: category.trim(),
+    description: description.trim(),
+    location: location.trim(),
     user: currentUser.uid,
     imageuri: image,
-    createAt: firebase.default.firestore.FieldValue.serverTimestamp(),
+    likesCount: 0,
+    createAt: firebase.firestore.FieldValue.serverTimestamp(),
   };
 
   const resetForm = () => {
@@ -42,90 +51,97 @@ const AddPostView = ({ navigation, currentUser }) => {
 
   const addPost = (post) => {
     setLoading(true);
+    cancelPost();
+    resetForm();
     projectFirestore
       .collection("posts")
       .doc(currentUser.uid)
       .collection("userPosts")
       .add(post)
       .then(() => {
-        setLoading(false), cancelPost(), resetForm();
+        setLoading(false);
       })
       .catch((error) => console.log(error));
   };
 
   const cancelPost = () => {
     setImage(null);
+    resetForm();
     navigation.navigate("Home");
   };
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.imageContainer}
-        onPress={() =>
-          addImage(showActionSheetWithOptions, setImage, currentUser, type)
-        }
-      >
-        <View
-          style={{
-            ...styles.imageInnerContainer,
-            backgroundColor: colors.iconBackgroundColor,
-            borderColor: colors.border,
-          }}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.imageContainer}
+          onPress={() =>
+            addImage(showActionSheetWithOptions, setImage, currentUser, type)
+          }
         >
-          {image ? (
-            <Image source={{ uri: image, width: 140, height: 140 }} />
-          ) : (
-            <AntDesign name="camera" color={colors.iconColor} size={50} />
-          )}
+          <View
+            style={{
+              ...styles.imageInnerContainer,
+              backgroundColor: colors.iconBackgroundColor,
+              borderColor: colors.border,
+            }}
+          >
+            {image ? (
+              <Image source={{ uri: image, width: 140, height: 140 }} />
+            ) : (
+              <AntDesign name="camera" color={colors.iconColor} size={50} />
+            )}
+          </View>
+        </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <ScrollView>
+            <CustomTextInput
+              space={10}
+              text="Title"
+              handleInput={setTitle}
+              textColor={colors.text}
+            />
+            <CustomTextInput
+              space={10}
+              text="Price"
+              handleInput={setPrice}
+              textColor={colors.text}
+            />
+            <CustomTextInput
+              space={10}
+              text="Category"
+              handleInput={setCategory}
+              textColor={colors.text}
+            />
+            <CustomTextInput
+              space={10}
+              text="Description"
+              handleInput={setDescription}
+              textColor={colors.text}
+            />
+            <CustomTextInput
+              space={10}
+              text="Location"
+              handleInput={setLocation}
+              textColor={colors.text}
+            />
+          </ScrollView>
         </View>
-      </TouchableOpacity>
-      <View style={styles.inputContainer}>
-        <CustomTextInput
-          space={20}
-          text="Title"
-          handleInput={setTitle}
-          textColor={colors.text}
-        />
-        <CustomTextInput
-          space={20}
-          text="Price"
-          handleInput={setPrice}
-          textColor={colors.text}
-        />
-        <CustomTextInput
-          space={20}
-          text="Category"
-          handleInput={setCategory}
-          textColor={colors.text}
-        />
-        <CustomTextInput
-          space={20}
-          text="Description"
-          handleInput={setDescription}
-          textColor={colors.text}
-        />
-        <CustomTextInput
-          space={20}
-          text="Location"
-          handleInput={setLocation}
-          textColor={colors.text}
-        />
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            text="Post"
+            color="white"
+            backgroundColor="#00C2FF"
+            onClick={() => addPost(post)}
+          />
+          <CustomButton
+            text="Cancel"
+            color="white"
+            backgroundColor="lightgray"
+            onClick={() => cancelPost()}
+          />
+        </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <CustomButton
-          text="Post"
-          color="white"
-          backgroundColor="#00C2FF"
-          onClick={() => addPost(post)}
-        />
-        <CustomButton
-          text="Cancel"
-          color="white"
-          backgroundColor="lightgray"
-          onClick={() => cancelPost()}
-        />
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -133,7 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  imageContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  imageContainer: { flex: 2, justifyContent: "center", alignItems: "center" },
   imageInnerContainer: {
     width: 150,
     height: 150,
@@ -143,7 +159,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   inputContainer: {
-    flex: 1,
+    flex: 2,
     justifyContent: "center",
     paddingLeft: 20,
     paddingRight: 20,

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet, Text } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
@@ -10,6 +10,8 @@ const CustomInput = ({
   handleInput,
   showPassword,
   setShowPassword,
+  msg,
+  isValid,
 }) => {
   let eye = showPassword ? (
     <Entypo
@@ -27,14 +29,17 @@ const CustomInput = ({
   return (
     <View style={{ ...styles.TextInputContainer, paddingBottom: space }}>
       <TextInput
+        multiline
         secureTextEntry={showPassword}
         placeholder={text}
         placeholderTextColor="#C4C4C4"
         underlineColorAndroid="#9DE8FF"
         style={{ ...styles.textInput, color: textColor }}
         onChangeText={(input) => handleInput(input.trim())}
+        clearButtonMode="always"
       />
       {text === "Password" && eye}
+      {isValid ? null : <Text style={{ color: "tomato" }}>{msg}</Text>}
     </View>
   );
 };

@@ -9,7 +9,6 @@ import {
   Image,
   Dimensions,
   StyleSheet,
-  Share,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -33,25 +32,15 @@ const Post = ({ item, navigation, handleOnLike, authenticated, bs }) => {
           } else setLike(false);
         });
     }
-  }, []);
+  }, [like]);
 
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        message:
-          "React Native | A framework for building native apps using React",
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
+  const onNavigate = () => {
+    if (authenticated.currentUser) {
+      item.user === authenticated.currentUser.uid
+        ? navigation.navigate("Profile", { screen: "userpost" })
+        : navigation.navigate("userProfile", { item });
+    } else {
+      navigation.navigate("userProfile", { item });
     }
   };
 
@@ -74,9 +63,7 @@ const Post = ({ item, navigation, handleOnLike, authenticated, bs }) => {
           }}
         >
           <View style={styles.UserInfoContainer}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("userProfile", { item })}
-            >
+            <TouchableOpacity onPress={() => onNavigate()}>
               {item.userInfo.imageuri ? (
                 <Image
                   source={{ uri: item.userInfo.imageuri }}

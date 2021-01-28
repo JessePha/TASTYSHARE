@@ -6,10 +6,10 @@ import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
-import GeoCoder from "react-native-geocoding";
+// import GeoCoder from "react-native-geocoding";
 import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
-GeoCoder.init("AIzaSyBlcHfmNg4AXbWkHg72eX5HSCGBcSgteoQ");
+// GeoCoder.init("AIzaSyBlcHfmNg4AXbWkHg72eX5HSCGBcSgteoQ");
 
 const FoodBottomSheet = ({
   navigation,
@@ -24,19 +24,19 @@ const FoodBottomSheet = ({
 }) => {
   const [location, setLocation] = useState();
   const { colors } = useTheme();
-  useEffect(() => {
-    if (item.location) {
-      GeoCoder.from(item.location).then((json) => {
-        const location = {
-          latitude: json.results[0].geometry.viewport.northeast.lat,
-          longitude: json.results[0].geometry.viewport.northeast.lng,
-          latitudeDelta: 0.095,
-          longitudeDelta: 0.035,
-        };
-        setLocation(location);
-      });
-    }
-  }, [item.location]);
+  // useEffect(() => {
+  //   if (item.location) {
+  //     GeoCoder.from(item.location).then((json) => {
+  //       const location = {
+  //         latitude: json.results[0].geometry.viewport.northeast.lat,
+  //         longitude: json.results[0].geometry.viewport.northeast.lng,
+  //         latitudeDelta: 0.095,
+  //         longitudeDelta: 0.035,
+  //       };
+  //       setLocation(location);
+  //     });
+  //   }
+  // }, [item.location]);
 
   const header = () => (
     <View style={{ ...styles.header, backgroundColor: colors.background }}>

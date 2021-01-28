@@ -2,11 +2,13 @@ import React from "react";
 import { useTheme } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import AddPostView from "../../view/AddPostView";
+import NotificationView from "../../view/NotificationView";
+import SearchView from "../../view/SearchView";
 import HomeStack from "../homeStack/HomeStack";
 import { SettingStack } from "../homeStack/SettingStack";
 import { connect } from "react-redux";
 import Entypo from "react-native-vector-icons/Entypo";
-import MatericalIcons from "react-native-vector-icons/MaterialIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 const tabsNavigation = createMaterialBottomTabNavigator();
 const TabNavigation = ({ authenticated }) => {
@@ -36,7 +38,7 @@ const TabNavigation = ({ authenticated }) => {
               component={AddPostView}
               options={{
                 tabBarIcon: ({ color }) => (
-                  <MatericalIcons name="add-circle" size={25} color={color} />
+                  <MaterialIcons name="add-circle" size={25} color={color} />
                 ),
               }}
             />

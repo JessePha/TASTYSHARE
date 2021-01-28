@@ -45,7 +45,7 @@ const SettingView = ({
                   style={{ width: 80, height: 80, borderRadius: 40 }}
                 />
               ) : (
-                <AntDesign name="user" size={40} color="white" />
+                <AntDesign name="user" size={40} color={colors.iconColor} />
               )
             }
           />
@@ -78,29 +78,26 @@ const SettingView = ({
             />
           </Drawer.Section>
           <Drawer.Section>
-            <CustomBar
-              text="Saved"
-              textColor={colors.text}
-              bgColor={colors.background}
-              iconBgColor="lightblue"
-              userIconHeight={40}
-              userIconWidth={40}
-              icon={
-                <MaterialIcons
-                  name="keyboard-arrow-right"
-                  size={24}
-                  color="black"
-                />
-              }
-              image={
-                <AntDesign
-                  name="save"
-                  size={20}
-                  color="white"
-                  onPress={() => console.log("go to save")}
-                />
-              }
-            />
+            <TouchableOpacity
+              onPress={() => navigation.navigate("userpost", {})}
+            >
+              <CustomBar
+                text="Posts"
+                textColor={colors.text}
+                bgColor={colors.background}
+                iconBgColor="lightblue"
+                userIconHeight={40}
+                userIconWidth={40}
+                icon={
+                  <MaterialIcons
+                    name="keyboard-arrow-right"
+                    size={24}
+                    color="black"
+                  />
+                }
+                image={<AntDesign name="save" size={20} color="white" />}
+              />
+            </TouchableOpacity>
           </Drawer.Section>
           <Drawer.Section>
             <TouchableOpacity
