@@ -13,6 +13,7 @@ import LoadingScreen from "../view/LoadingView";
 import Logo from "../components/UI/Logo";
 import { isValidEmail, isValidPassword } from "../handleValidtion/validation";
 import { auth } from "../../config/config";
+import { appColors } from "../shared/global/colors/colors";
 
 const LoginView = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -49,7 +50,7 @@ const LoginView = ({ navigation }) => {
         const response = await auth.signInWithEmailAndPassword(email, password);
         if (response) {
           setLoading(false);
-          navigation.goBack();
+          navigation.goback();
         }
       } catch (error) {
         setLoading(false);
@@ -90,6 +91,7 @@ const LoginView = ({ navigation }) => {
                 <CustomInput
                   key={text + `${index}`}
                   text={text.text}
+                  textColor="white"
                   handleInput={text.handleInput}
                   showPassword={text.showPassword}
                   setShowPassword={text.setShowPassword}
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     display: "flex",
-    backgroundColor: "#5A595B",
+    backgroundColor: appColors.appBgColor,
     paddingLeft: 35,
     paddingRight: 35,
   },
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#fff",
   },
   logoContainer: {
-    paddingTop:30,
+    paddingTop: 30,
     justifyContent: "flex-end",
     alignItems: "center",
   },

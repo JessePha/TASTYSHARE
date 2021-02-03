@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
+import { appColors } from "../../shared/global/colors/colors";
 
 const Logo = ({ size }) => {
   return (
@@ -12,7 +13,7 @@ const Logo = ({ size }) => {
 const style = StyleSheet.create({
   Logo: {
     fontSize: 30,
-    color: "#00C2FF",
+    color: appColors.logo,
     textTransform: "uppercase",
     letterSpacing: 2,
   },

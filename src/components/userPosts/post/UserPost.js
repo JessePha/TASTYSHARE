@@ -10,8 +10,10 @@ import {
 import moment from "moment";
 import Swipable from "react-native-gesture-handler/Swipeable";
 import { useTheme } from "@react-navigation/native";
+import { connect } from "react-redux";
+import * as actionTypes from "../../../shared/global/globalstates/actions/actionTypes";
 
-const Post = ({ item, onDelete, onEdit }) => {
+const UserPost = ({ item, onDelete, onEdit, deletePost }) => {
   const { colors } = useTheme();
 
   const LeftAction = ({ progress, dragX, onPress }) => {
@@ -23,7 +25,7 @@ const Post = ({ item, onDelete, onEdit }) => {
     return (
       <TouchableOpacity
         style={styles.detleteContainer}
-        onPress={() => onPress(item.user, item.postID)}
+        onPress={() => onPress(item.user, item.postID, deletePost)}
       >
         <Animated.Text style={[styles.deleteText, { transform: [{ scale }] }]}>
           Delete
@@ -49,6 +51,7 @@ const Post = ({ item, onDelete, onEdit }) => {
       </TouchableOpacity>
     );
   };
+  const handleDelete = () => {};
 
   return (
     <>
@@ -68,19 +71,43 @@ const Post = ({ item, onDelete, onEdit }) => {
           }}
         >
           <Image source={{ uri: item.imageuri }} style={styles.Image} />
-          <View>
-            {item.title ? (
-              <Text style={{ color: colors.text }}>{item.title}</Text>
-            ) : null}
+          <View style={{ width: 200 }}>
+            {item.title !== "" ? (
+              <Text
+                style={{
+                  color: colors.text,
+                  fontWeight: "bold",
+                  marginBottom: 5,
+                }}
+              >
+                {item.title}
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  color: colors.text,
+                  fontWeight: "bold",
+                  marginBottom: 5,
+                }}
+              >
+                No Title
+              </Text>
+            )}
             {item.price ? (
               <Text style={{ color: colors.text }}>{item.price}</Text>
             ) : null}
-            {item.description ? (
-              <Text style={{ color: colors.text }}>{item.description}</Text>
-            ) : null}
-            {item.location ? (
-              <Text style={{ color: colors.text }}>{item.location}</Text>
-            ) : null}
+            {item.description !== "" ? (
+              <Text
+                numberOfLines={4}
+                style={{ color: colors.text, marginBottom: 5 }}
+              >
+                {item.description}
+              </Text>
+            ) : (
+              <Text style={{ color: colors.text, marginBottom: 5 }}>
+                No description
+              </Text>
+            )}
             <Text style={{ color: colors.text }}>
               {item.createAt &&
                 moment(item.createAt.toDate().toString()).calendar()}
@@ -131,4 +158,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Post;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deletePost: (postID) =>
+      dispatch({ type: actionTypes.DELETE_POST, payload: postID }),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(UserPost);

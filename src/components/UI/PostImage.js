@@ -9,7 +9,7 @@ import {
 
 const PostImage = ({ img }) => {
   return (
-    <TouchableOpacity onPress={() => alert("To user profile")}>
+    <TouchableOpacity>
       <View style={styles.contain}>
         <Image source={{ uri: img }} style={styles.Image} />
       </View>

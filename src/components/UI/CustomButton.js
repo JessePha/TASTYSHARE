@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { appColors } from "../../shared/global/colors/colors";
 
 const Button = ({ text, onClick, color, backgroundColor }) => {
   let style = null;
@@ -37,17 +38,17 @@ const styles = StyleSheet.create({
   appButtonContainer: {},
   appButtonText: {
     fontSize: 12,
-    color: "black",
+    color: appColors.appButtonText,
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
     paddingLeft: 12,
   },
   shareText: {
-    color: "#fff",
+    color: appColors.shareText,
   },
   likeText: {
-    color: "#fff",
+    color: appColors.likeText,
     paddingLeft: 5,
     paddingRight: 10,
   },
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   postButton: {
     fontSize: 14,
     padding: 10,
-    backgroundColor: "#00C2FF",
+    backgroundColor: appColors.postButtonBgColor,
     textAlign: "center",
     width: 150,
     marginBottom: 10,
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   changeButton: {
     fontSize: 14,
     padding: 10,
-    backgroundColor: "#54e346",
+    backgroundColor: appColors.changeButtonbgColor,
     textAlign: "center",
     width: 150,
     marginBottom: 10,
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   cancelButton: {
     fontSize: 14,
     padding: 10,
-    backgroundColor: "#00C2FF",
+    backgroundColor: appColors.cancelButtongbColor,
     textAlign: "center",
     width: 150,
     borderRadius: 30,

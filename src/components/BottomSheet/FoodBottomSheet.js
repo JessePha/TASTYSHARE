@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import BottomSheet from "reanimated-bottom-sheet";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -9,6 +9,8 @@ import MapView, { Marker } from "react-native-maps";
 // import GeoCoder from "react-native-geocoding";
 import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
+import { handleOnLike } from "../../handleLikesAndFollows/handleLikes";
+import { appColors } from "../../shared/global/colors/colors";
 // GeoCoder.init("AIzaSyBlcHfmNg4AXbWkHg72eX5HSCGBcSgteoQ");
 
 const FoodBottomSheet = ({
@@ -19,13 +21,24 @@ const FoodBottomSheet = ({
   item,
   like,
   setLike,
-  handleOnLike,
   comments,
 }) => {
   const [location, setLocation] = useState();
+  const [countLikes, setCountLikes] = useState(item.likesCount);
   const { colors } = useTheme();
+  const [isTruncated, setIsTruncated] = useState(true);
+  const resultString = isTruncated
+    ? item.description.slice(0, 100)
+    : item.description;
+
+  const initialRegion = {
+    latitude: 57.930021,
+    longitude: 12.536211,
+    latitudeDelta: 0.095,
+    longitudeDelta: 0.035,
+  };
   // useEffect(() => {
-  //   if (item.location) {
+  //   if (item.location !== "" && item.location !== undefined) {
   //     GeoCoder.from(item.location).then((json) => {
   //       const location = {
   //         latitude: json.results[0].geometry.viewport.northeast.lat,
@@ -36,64 +49,99 @@ const FoodBottomSheet = ({
   //       setLocation(location);
   //     });
   //   }
-  // }, [item.location]);
+  // }, []);
+
+  const onNavigate = (item) => {
+    if (authenticated.currentUser) {
+      item.user === authenticated.currentUser.uid
+        ? navigation.navigate("Profile", {
+            screen: "userpost",
+            params: { item },
+          })
+        : navigation.navigate("userProfile", { item });
+    } else {
+      navigation.navigate("userProfile", { item });
+    }
+  };
 
   const header = () => (
-    <View style={{ ...styles.header, backgroundColor: colors.background }}>
-      <View style={styles.UserInfoContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("userProfile", { item })}
-        >
-          {item.userInfo.imageuri ? (
-            <Image
-              source={{ uri: item.userInfo.imageuri }}
-              style={{ width: 40, height: 40, borderRadius: 20 }}
-            />
-          ) : (
-            <View
-              style={{
-                display: "flex",
-                width: 40,
-                height: 40,
-                backgroundColor: colors.iconBackgroundColor,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 20,
-              }}
-            >
-              <AntDesign name="user" size={20} color={colors.iconColor} />
-            </View>
-          )}
-        </TouchableOpacity>
-        <Text
-          style={{ ...styles.userName, color: colors.text }}
-        >{`${item.userInfo.firstName} ${item.userInfo.lastName}`}</Text>
+    <View
+      style={{
+        ...styles.header,
+        backgroundColor: colors.background,
+      }}
+    >
+      <View style={styles.innderHeader}>
+        <View style={styles.UserInfoContainer}>
+          <TouchableOpacity onPress={() => onNavigate(item)}>
+            {item.userInfo.imageuri ? (
+              <Image
+                source={{ uri: item.userInfo.imageuri }}
+                style={{ width: 40, height: 40, borderRadius: 20 }}
+              />
+            ) : (
+              <View
+                style={{
+                  width: 40,
+                  height: 40,
+                  backgroundColor: colors.iconBackgroundColor,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 20,
+                }}
+              >
+                <AntDesign name="user" size={20} color={colors.iconColor} />
+              </View>
+            )}
+          </TouchableOpacity>
+          <Text
+            style={{ ...styles.userName, color: colors.text }}
+          >{`${item.userInfo.firstName} ${item.userInfo.lastName}`}</Text>
+        </View>
+        <View style={styles.UserLikeAndComments}>
+          <AntDesign
+            name={like ? "like1" : "like2"}
+            size={20}
+            color="gray"
+            style={{ marginLeft: 10 }}
+            onPress={() =>
+              handleOnLike(
+                authenticated,
+                item.user,
+                item.postID,
+                like,
+                setLike,
+                countLikes,
+                setCountLikes,
+                bs
+              )
+            }
+          />
+          <Feather
+            name="message-square"
+            size={20}
+            color="gray"
+            style={{ marginLeft: 10 }}
+            onPress={() => bs1.current.snapTo(0)}
+          />
+        </View>
       </View>
-      <View style={styles.UserLikeAndComments}>
-        <FontAwesome name="bookmark-o" size={20} color="gray" />
-        <AntDesign
-          name={like ? "like1" : "like2"}
-          size={20}
-          color="gray"
-          style={{ marginLeft: 10 }}
-          onPress={() =>
-            handleOnLike(
-              authenticated,
-              item.user,
-              item.postID,
-              like,
-              setLike,
-              bs
-            )
-          }
-        />
-        <Feather
-          name="message-square"
-          size={20}
-          color="gray"
-          style={{ marginLeft: 10 }}
-          onPress={() => bs1.current.snapTo(0)}
-        />
+      <View
+        style={{
+          ...styles.likesAndCommentsCount,
+          backgroundColor: colors.background,
+        }}
+      >
+        <View
+          style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}
+        >
+          <Text
+            style={{ color: "gray" }}
+          >{`Comments: ${comments.length}`}</Text>
+          <Text style={{ color: "gray", paddingLeft: 10 }}>{`likes: ${
+            countLikes ? countLikes : 0
+          }`}</Text>
+        </View>
       </View>
     </View>
   );
@@ -102,41 +150,61 @@ const FoodBottomSheet = ({
     <View style={styles.content}>
       <View
         style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          alignItems: "center",
+          padding: 15,
           backgroundColor: colors.background,
-          height: 40,
-          padding: 5,
+          marginBottom: 20,
         }}
       >
-        <Text style={{ color: "gray" }}>{`Comments: ${comments.length}`}</Text>
-        <Text style={{ color: "gray", paddingLeft: 10 }}>{`likes: ${
-          item.likesCount ? item.likesCount : 0
-        }`}</Text>
+        <View style={{ paddingBottom: 20 }}>
+          <Text
+            numberOfLines={1}
+            style={{ color: colors.text, fontWeight: "bold" }}
+          >
+            {item.title ? item.title : "No title"}
+          </Text>
+        </View>
+        <View>
+          <Text
+            style={{
+              fontWeight: "bold",
+              color: colors.text,
+            }}
+          >
+            Desciption
+          </Text>
+          <ScrollView>
+            <Text numberOfLines={20} style={{ color: colors.text }}>
+              {item.description ? `${resultString}` : "No description"}
+            </Text>
+            <TouchableOpacity onPress={() => setIsTruncated(!isTruncated)}>
+              {resultString.length > 50 ? (
+                <Text style={{ fontWeight: "bold", color: colors.text }}>
+                  {isTruncated ? "... Show more" : "Show less"}
+                </Text>
+              ) : null}
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
       </View>
-      <View
-        style={{ flex: 1, padding: 15, backgroundColor: colors.background }}
-      >
-        <Text style={{ color: colors.text }}>
-          {item.description ? item.description : "No description"}
-        </Text>
-      </View>
-      {location && (
-        <View style={{ flex: 5, marginTop: 10 }}>
-          <MapView style={StyleSheet.absoluteFill} region={location}>
+      {
+        <View
+          style={{ flex: 5, marginTop: 10, backgroundColor: colors.background }}
+        >
+          <MapView
+            style={StyleSheet.absoluteFill}
+            initialRegion={initialRegion}
+            region={location && location}
+          >
             <Marker
               coordinate={{
-                latitude: location.latitude,
-                longitude: location.longitude,
+                latitude: initialRegion.latitude,
+                longitude: initialRegion.longitude,
               }}
               title={`${item.location}`}
             ></Marker>
           </MapView>
         </View>
-      )}
-      <View></View>
+      }
     </View>
   );
   return (
@@ -157,25 +225,38 @@ const FoodBottomSheet = ({
 
 const styles = StyleSheet.create({
   header: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    shadowColor: "black",
+    flexDirection: "column",
+    shadowColor: appColors.shadowColor,
     shadowOffset: { width: -1, height: -3 },
     shadowOpacity: 0.4,
     paddingTop: 10,
     paddingLeft: 10,
     paddingRight: 10,
   },
+  innderHeader: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingLeft: 5,
+    paddingRight: 10,
+  },
   content: {
-    backgroundColor: "white",
+    backgroundColor: appColors.bottomSheetContent,
     height: Dimensions.get("screen").height - 300,
+  },
+  likesAndCommentsCount: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 40,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   Image: {
     width: Dimensions.get("screen").width,
     height: 300,
-    backgroundColor: "#C4C4C4",
+    backgroundColor: appColors.bottomSheetContent,
   },
   UserInfoContainer: {
     display: "flex",
@@ -189,7 +270,7 @@ const styles = StyleSheet.create({
   userName: { marginLeft: 10 },
   map: {
     width: Dimensions.get("screen").width,
-    height: 300,
+    height: 250,
   },
 });
 

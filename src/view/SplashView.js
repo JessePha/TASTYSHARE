@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Image } from "react-native";
 import Logo from "../components/UI/Logo";
-// const gif = require("../../assets/TastyShare.gif");
+import { appColors } from "../shared/global/colors/colors";
 const gif2 = require("../../assets/TastyShare2.gif");
 
 const IntroScreen = () => {
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#5A595B",
+    backgroundColor: appColors.appBgColor,
   },
   text: {
     color: "white",

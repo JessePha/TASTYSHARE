@@ -11,7 +11,7 @@ export const openImageLibrary = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [1, 1],
+      aspect: [4, 3],
       base64: true,
     });
     return !result.cancelled ? result : false;

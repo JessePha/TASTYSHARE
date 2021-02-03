@@ -6,12 +6,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Text,
-  Modal,
 } from "react-native";
 import CustomText from "../components/UI/CustomText";
 import CustomInput from "../components/UI/CustomInput";
 import CustomButton from "../components/UI/CustomButton";
 import { auth } from "../../config/config";
+import { appColors } from "../shared/global/colors/colors";
 
 const ForgetPasswordView = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     display: "flex",
     flex: 1,
-    backgroundColor: "#5A595B",
+    backgroundColor: appColors.appBgColor,
     paddingLeft: 35,
     paddingRight: 35,
   },

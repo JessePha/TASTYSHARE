@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import NavigationItem from "./NavigationItem/NavigationItem";
+import { appColors } from "../../../../shared/global/colors/colors";
 
-const NavigationItems = ({goTo, color}) => {
+const NavigationItems = ({ goTo, color }) => {
   const texts = ["Log in", "Register"];
   return (
     <View
@@ -13,7 +14,12 @@ const NavigationItems = ({goTo, color}) => {
       }}
     >
       {texts.map((text) => (
-        <NavigationItem key = {text} text={text} navigateTo = {goTo} color = {color} />
+        <NavigationItem
+          key={text}
+          text={text}
+          navigateTo={goTo}
+          color={color}
+        />
       ))}
     </View>
   );
@@ -21,10 +27,10 @@ const NavigationItems = ({goTo, color}) => {
 
 const style = StyleSheet.create({
   appButtonLogin: {
-    color: "#FFFFFF",
+    color: appColors.appButtonLogin,
   },
   appButtonRegister: {
-    color: "#C4C4C4",
+    color: appColors.appButtonRegister,
   },
 });
 

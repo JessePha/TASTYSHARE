@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { appColors } from "../../shared/global/colors/colors";
 
 const CustomText = ({ text }) => {
   let styleContainer = null;
@@ -7,9 +8,9 @@ const CustomText = ({ text }) => {
   if (text === "Sign up to") {
     styleContainer = styles.signUp;
     textStyle = styles.signUpText;
-  } else{
-    styleContainer = styles.textContainer
-    textStyle = styles.text
+  } else {
+    styleContainer = styles.textContainer;
+    textStyle = styles.text;
   }
   return (
     <View style={styleContainer}>
@@ -30,11 +31,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   text: {
-    color: "white",
+    color: appColors.text,
     fontSize: 30,
   },
   signUpText: {
-    color: "white",
+    color: appColors.text,
     fontSize: 15,
   },
 });

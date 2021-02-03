@@ -9,7 +9,6 @@ const UserPosts = ({ posts, navigation }) => {
   const bs = createRef();
   const fall = new Animated.Value(1);
   const [postInfo, setPostInfo] = useState({});
-
   const onEdit = (post) => {
     bs.current.snapTo(0);
     setPostInfo(post);
@@ -49,7 +48,6 @@ const UserPosts = ({ posts, navigation }) => {
       updateData = { ...updateData, imageuri: uPost.imageuri };
 
     updatePost(updateData);
-
     bs.current.snapTo(1);
   };
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
 import { Drawer } from "react-native-paper";
@@ -11,33 +11,18 @@ import {
   StyleSheet,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { projectFirestore } from "../../../../config/config";
+import moment from "moment";
 
-const Post = ({ item, navigation, handleOnLike, authenticated, bs }) => {
+const Post = ({ item, navigation, authenticated }) => {
   const { colors } = useTheme();
-  const [like, setLike] = useState(false);
-  useEffect(() => {
-    if (authenticated.currentUser) {
-      projectFirestore
-        .collection("posts")
-        .doc(item.user)
-        .collection("userPosts")
-        .doc(item.postID)
-        .collection("likes")
-        .doc(authenticated.currentUser.uid)
-        .onSnapshot((snapshot) => {
-          if (snapshot.exists) {
-            setLike(true);
-          } else setLike(false);
-        });
-    }
-  }, [like]);
 
-  const onNavigate = () => {
+  const onNavigate = (item) => {
     if (authenticated.currentUser) {
       item.user === authenticated.currentUser.uid
-        ? navigation.navigate("Profile", { screen: "userpost" })
+        ? navigation.navigate("tab", {
+            screen: "Profile",
+            params: { item },
+          })
         : navigation.navigate("userProfile", { item });
     } else {
       navigation.navigate("userProfile", { item });
@@ -63,7 +48,7 @@ const Post = ({ item, navigation, handleOnLike, authenticated, bs }) => {
           }}
         >
           <View style={styles.UserInfoContainer}>
-            <TouchableOpacity onPress={() => onNavigate()}>
+            <TouchableOpacity onPress={() => onNavigate(item)}>
               {item.userInfo.imageuri ? (
                 <Image
                   source={{ uri: item.userInfo.imageuri }}
@@ -84,29 +69,12 @@ const Post = ({ item, navigation, handleOnLike, authenticated, bs }) => {
               style={{ ...styles.userName, color: colors.text }}
             >{`${item.userInfo.firstName} ${item.userInfo.lastName}`}</Text>
           </View>
-          <View style={styles.UserLikeAndShare}>
-            <AntDesign
-              name={like ? "like1" : "like2"}
-              size={20}
-              color={colors.iconBackgroundColor}
-              onPress={() =>
-                handleOnLike(
-                  authenticated,
-                  item.user,
-                  item.postID,
-                  like,
-                  setLike,
-                  bs
-                )
-              }
-            />
-            <Entypo
-              name="share"
-              size={20}
-              color={colors.iconBackgroundColor}
-              style={{ marginLeft: 10, marginRight: 10 }}
-              onPress={() => onShare()}
-            />
+          <View>
+            <Text style={{ color: colors.text }}>
+              {moment(item.createAt.toDate().toString())
+                .startOf("hour")
+                .fromNow()}
+            </Text>
           </View>
         </View>
       </Drawer.Section>
@@ -146,6 +114,7 @@ const styles = StyleSheet.create({
   UserLikeAndShare: {
     display: "flex",
     flexDirection: "row",
+    marginRight: 20,
   },
 });
 

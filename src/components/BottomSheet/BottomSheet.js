@@ -2,8 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import BottomSheet from "reanimated-bottom-sheet";
+import { useTheme } from "@react-navigation/native";
+import { appColors } from "../../shared/global/colors/colors";
 
 const bottomSheet = ({ navigation, bs, fall }) => {
+  const { colors } = useTheme();
   const header = () => (
     <View style={styles.header}>
       <View style={styles.padnelHeader}>
@@ -14,24 +17,43 @@ const bottomSheet = ({ navigation, bs, fall }) => {
 
   const content = () => (
     <View style={styles.content}>
-      <Text>Join TastyShare!</Text>
-      <Text>Sign up to like and share your content</Text>
-      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-        <Text>Sign up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Log in")}>
-        <Text>Already have account ?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
-        <Text>Mabe later</Text>
-      </TouchableOpacity>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: colors.text, fontSize: 20, paddingRight: 10 }}>
+            Join
+          </Text>
+          <Text style={{ color: appColors.logo, fontSize: 22 }}>
+            TASTYSHARE
+          </Text>
+          <Text style={{ fontSize: 20, color: colors.text }}> !</Text>
+        </View>
+        <Text style={{ color: colors.text }}>
+          Sign up to like and share your content
+        </Text>
+      </View>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text style={{ color: colors.text }}>Sign up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Log in")}>
+          <Text style={{ color: colors.text }}>Already have account ?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
+          <Text style={{ color: colors.text }}>Mabe later</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
   return (
     <>
       <BottomSheet
         ref={bs}
-        snapPoints={[250, 0]}
+        snapPoints={[300, 0]}
         renderHeader={header}
         renderContent={content}
         initialSnap={1}
@@ -44,8 +66,8 @@ const bottomSheet = ({ navigation, bs, fall }) => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "white",
-    shadowColor: "black",
+    backgroundColor: appColors.bottomSheetHeaderBgColor,
+    shadowColor: appColors.shadowColor,
     shadowOffset: { width: -1, height: -3 },
     shadowRadius: 2,
     shadowOpacity: 0.4,
@@ -58,14 +80,14 @@ const styles = StyleSheet.create({
     width: 30,
     height: 5,
     borderRadius: 4,
-    backgroundColor: "#00000040",
+    backgroundColor: appColors.panelHandle,
     marginBottom: 10,
   },
   content: {
     alignItems: "center",
-    backgroundColor: "white",
-    padding: 20,
-    height: 250,
+    justifyContent: "space-around",
+    backgroundColor: appColors.bottomSheetContent,
+    height: 270,
   },
 });
 

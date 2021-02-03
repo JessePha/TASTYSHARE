@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import HomeScreen from "./routes/tabNavigation/HomeScreen";
+import React, { useEffect } from "react";
+import HomeScreen from "./routes/HomeScreen";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import * as actionType from "./shared/global/globalstates/actions/actionTypes";
 import { auth } from "../config/config";
@@ -22,6 +22,7 @@ const TastyShare = ({
   signOut,
   isDarkTheme,
 }) => {
+  
   const CustomDefaultTheme = {
     ...NavigationDefaultTheme,
     ...PaperDefaultTheme,
@@ -77,7 +78,7 @@ const TastyShare = ({
 
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer theme={theme} >
+      <NavigationContainer theme={theme}>
         <HomeScreen auth={authenticated.isSignedIn} />
       </NavigationContainer>
     </PaperProvider>
@@ -88,6 +89,7 @@ const mapStateToProps = (state) => {
   return {
     authenticated: state.auth,
     isDarkTheme: state.auth.theme,
+    users: state.pts.users,
   };
 };
 

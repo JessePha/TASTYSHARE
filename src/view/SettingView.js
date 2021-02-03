@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Switch, Drawer, TouchableRipple } from "react-native-paper";
 import { useTheme } from "@react-navigation/native";
@@ -7,24 +7,26 @@ import { MaterialIcons } from "@expo/vector-icons";
 import CustomBar from "../components/UI/CustomBar";
 import { auth } from "../../config/config";
 import { connect } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import * as actionTypes from "../shared/global/globalstates/actions/actionTypes";
+import LoadingScreen from "../view/LoadingView";
 
-const SettingView = ({
-  navigation,
-  currentUser,
-  currentTheme,
-  changeTheme,
-}) => {
+const SettingView = ({ currentUser, currentTheme, changeTheme }) => {
   const { colors } = useTheme();
-
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
   const onSignOut = async () => {
+    setLoading(true);
     try {
       await auth.signOut();
-      navigation.navigate("Home", { screen: "Main" });
     } catch (error) {
       console.log(error);
     }
   };
+  if (loading) {
+    return <LoadingScreen />;
+  }
+  
 
   return (
     <View style={styles.container}>
@@ -52,31 +54,6 @@ const SettingView = ({
         </View>
         <Drawer.Section></Drawer.Section>
         <View style={styles.infoContainer}>
-          <Drawer.Section>
-            <CustomBar
-              text="Likes"
-              textColor={colors.text}
-              bgColor={colors.background}
-              iconBgColor="lightgreen"
-              userIconHeight={40}
-              userIconWidth={40}
-              icon={
-                <MaterialIcons
-                  name="keyboard-arrow-right"
-                  size={24}
-                  color="black"
-                />
-              }
-              image={
-                <AntDesign
-                  name="like2"
-                  size={20}
-                  color="white"
-                  onPress={() => console.log("go to Likes")}
-                />
-              }
-            />
-          </Drawer.Section>
           <Drawer.Section>
             <TouchableOpacity
               onPress={() => navigation.navigate("userpost", {})}
@@ -125,22 +102,17 @@ const SettingView = ({
           </Drawer.Section>
         </View>
         <View style={styles.logoutContainer}>
-          <CustomBar
-            text="Log out"
-            textColor={colors.text}
-            bgColor={colors.background}
-            iconBgColor="tomato"
-            userIconHeight={40}
-            userIconWidth={40}
-            image={
-              <AntDesign
-                name="logout"
-                size={20}
-                color="white"
-                onPress={() => onSignOut()}
-              />
-            }
-          />
+          <TouchableOpacity onPress={() => onSignOut()}>
+            <CustomBar
+              text="Log out"
+              textColor={colors.text}
+              bgColor={colors.background}
+              iconBgColor="tomato"
+              userIconHeight={40}
+              userIconWidth={40}
+              image={<AntDesign name="logout" size={20} color="white" />}
+            />
+          </TouchableOpacity>
           <Drawer.Section title="preference">
             <TouchableRipple onPress={() => changeTheme(!currentTheme)}>
               <View style={styles.preference}>
@@ -169,7 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   infoContainer: {
-    flex: 3,
+    flex: 2,
     justifyContent: "center",
   },
   logoutContainer: {

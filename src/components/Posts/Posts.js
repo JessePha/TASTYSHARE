@@ -1,18 +1,15 @@
 import React from "react";
 import Post from "./Post/Post";
-import { View, Text, FlatList, ScrollView, RefreshControl } from "react-native";
-import { handleOnLike } from "../../handleLikesAndFollows/handleLikes";
-import { useTheme } from "@react-navigation/native";
+import { View, FlatList } from "react-native";
 const Posts = ({
   navigation,
   posts,
   setModalVisible,
   authenticated,
-  bs,
   onRefresh,
   refreshing,
 }) => {
-  const { colors } = useTheme();
+
   return (
     <View style={{ flex: 1 }}>
       {posts.length > 0 ? (
@@ -26,8 +23,6 @@ const Posts = ({
               item={item}
               navigation={navigation}
               setModalVisible={setModalVisible}
-              handleOnLike={handleOnLike}
-              bs={bs}
               authenticated={authenticated}
             />
           )}

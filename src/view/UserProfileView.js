@@ -6,17 +6,23 @@ import CustomBar from "../components/UI/CustomBar";
 import UserPosts from "../components/userPosts/UserPosts";
 import { AntDesign } from "@expo/vector-icons";
 
-const ProfileView = ({ allPosts, navigation, authenticated }) => {
+const UserProfileView = ({ allPosts, navigation, authenticated, route }) => {
   const { colors } = useTheme();
+  const { item } = route.params;
   const userPosts = allPosts.filter(
     (post) => post.user === authenticated.currentUser.uid
   );
+  
   return userPosts.length > 0 ? (
     <View style={{ ...styles.container, backgroundColor: colors.background }}>
       <View style={styles.profileContainer}>
         {
           <CustomBar
-            text={`${userPosts[0].userInfo.firstName} ${userPosts[0].userInfo.lastName}`}
+            text={`${
+              item ? item.userInfo.firstName : userPosts[0].userInfo.firstName
+            } ${
+              item ? item.userInfo.firstName : userPosts[0].userInfo.lastName
+            }`}
             textColor={colors.text}
             userIconHeight={60}
             userIconWidth={60}
@@ -26,7 +32,11 @@ const ProfileView = ({ allPosts, navigation, authenticated }) => {
             image={
               userPosts[0].userInfo.imageuri ? (
                 <Image
-                  source={{ uri: item.userInfo.imageuri }}
+                  source={{
+                    uri: item
+                      ? item.userInfo.imageuri
+                      : userPosts[0].userInfo.imageuri,
+                  }}
                   style={{ width: 65, height: 65, borderRadius: 35 }}
                 />
               ) : (
@@ -83,4 +93,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(ProfileView);
+export default connect(mapStateToProps, null)(UserProfileView);

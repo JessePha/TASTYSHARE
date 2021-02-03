@@ -7,6 +7,7 @@ const ViewUserPosts = ({ posts, navigation }) => {
     <View style={{ flex: 1 }}>
       <FlatList
         data={posts}
+        numColumns={2}
         keyExtractor={(item) => item.postID}
         renderItem={({ item }) => <Post item={item} navigation={navigation} />}
       />

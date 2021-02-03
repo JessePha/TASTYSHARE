@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createRef } from "react";
 import {
   View,
   Text,
@@ -12,77 +12,57 @@ import {
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import BottomSheet from "reanimated-bottom-sheet";
 import { useTheme } from "@react-navigation/native";
-import { projectFirestore } from "../../../config/config";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import CommentBar from "../UI/CommentBar";
 import { connect } from "react-redux";
 import * as actionTypes from "../../shared/global/globalstates/actions/actionTypes";
+import { getAllComments } from "../../handleLikesAndFollows/handleComments";
+import { appColors } from "../../shared/global/colors/colors";
 
 const bottomSheet = ({
   authenticated,
   post,
   navigation,
   bs,
+  bs2,
   fall,
   contentType,
   handleOnComment,
   onDeleteComment,
+  setEditComment,
+  users,
   getComments,
+  comments,
 }) => {
   const [text, setText] = useState();
-  const [users, setUsers] = useState([]);
-  const [com, setCom] = useState([]);
+  const [commentState, setCommentState] = useState(false);
   const { colors } = useTheme();
-  useEffect(() => {
-    projectFirestore
-      .collection("users")
-      .get()
-      .then((snapshot) => {
-        let users = snapshot.docs.map((doc) => {
-          const data = doc.data();
-          const id = doc.id;
-          return { ...data, id };
-        });
-        setUsers(users);
-      });
-  }, []);
-
+  const clearText = createRef();
   useEffect(() => {
     const unsubscribe = () => {
-      if (users.length > 0) {
-        projectFirestore
-          .collection("posts")
-          .doc(post.user)
-          .collection("userPosts")
-          .doc(post.postID)
-          .collection("comments")
-          .onSnapshot((snapshot) => {
-            const comments = [];
-            snapshot.docs.forEach((doc) => {
-              const data = doc.data();
-              const id = doc.id;
-              users.map((user) => {
-                if (user.id === data.creator) {
-                  user = { userInfo: { ...user }, ...data, id };
-                  comments.push(user);
-                }
-              });
-            });
-            setCom(comments);
-            getComments(comments);
-          });
-      }
+      getAllComments(post.user, post.postID, users, getComments);
     };
     unsubscribe();
-  }, [users]);
+    return () => unsubscribe();
+  }, [commentState]);
+
+  const onComment = () => {
+    setCommentState(!commentState);
+    Keyboard.dismiss;
+    setText("");
+    clearText.current.clear();
+    handleOnComment(authenticated, post.user, post.postID, bs, text);
+    bs.current.snapTo(1);
+  };
+
   const header = () => {
     if (contentType === "comment")
       return (
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <TouchableWithoutFeedback>
             <View
               style={{ ...styles.header, backgroundColor: colors.background }}
             >
@@ -98,15 +78,15 @@ const bottomSheet = ({
                     placeholder="Write a comment"
                     value={text}
                     onChangeText={(input) => setText(input)}
-                    placeholderTextColor="#C4C4C4"
+                    placeholderTextColor={appColors.inputPlaceHolderColor}
                     style={{ color: colors.text }}
-                    clearButtonMode="always"
+                    ref={clearText}
                   ></TextInput>
                   <Entypo
                     name="arrow-with-circle-right"
                     size={24}
-                    color={colors.iconColor}
-                    onPress={onComment}
+                    color="darkgray"
+                    onPress={() => onComment()}
                   />
                 </View>
               </View>
@@ -125,14 +105,15 @@ const bottomSheet = ({
   };
   const content = () => {
     if (contentType === "comment") {
-      if (com.length > 0) {
+      if (comments.length > 0) {
         return (
           <View
             style={{ ...styles.comment, backgroundColor: colors.background }}
           >
             <FlatList
-              data={com}
+              data={comments}
               keyExtractor={(item) => item.id}
+              style={{ zIndex: 100 }}
               renderItem={({ item }) => (
                 <CommentBar
                   text={item.text}
@@ -143,7 +124,10 @@ const bottomSheet = ({
                   commentID={item.id}
                   currentUser={authenticated.currentUser.uid}
                   onDeleteComment={onDeleteComment}
+                  setEditComment={setEditComment}
                   post={post}
+                  bs={bs}
+                  bs1={bs2}
                 />
               )}
             />
@@ -162,27 +146,41 @@ const bottomSheet = ({
     } else if (contentType === "notLogin") {
       return (
         <View style={styles.content}>
-          <Text>Join TastyShare!</Text>
-          <Text>Sign up to like and share your content</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text>Sign up</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Log in")}>
-            <Text>Already have account ?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
-            <Text>Mabe later</Text>
-          </TouchableOpacity>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{ color: colors.text, fontSize: 20, paddingRight: 10 }}
+              >
+                Join
+              </Text>
+              <Text style={{ color: appColors.logo, fontSize: 22 }}>
+                TASTYSHARE
+              </Text>
+              <Text style={{ fontSize: 20, color: colors.text }}> !</Text>
+            </View>
+            <Text style={{ color: colors.text }}>
+              Sign up to like and share your content
+            </Text>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+              <Text style={{ color: colors.text }}>Sign up</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("Log in")}>
+              <Text style={{ color: colors.text }}>Already have account ?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => bs.current.snapTo(1)}>
+              <Text style={{ color: colors.text }}>Mabe later</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       );
     }
-  };
-
-  const onComment = () => {
-    if (text !== "") {
-      handleOnComment(authenticated, post.user, post.postID, bs, text);
-    }
-    bs.current.snapTo(1);
   };
 
   return (
@@ -202,11 +200,12 @@ const bottomSheet = ({
 
 const styles = StyleSheet.create({
   header: {
-    shadowColor: "black",
+    shadowColor: appColors.shadowColor,
     shadowOffset: { width: -1, height: -3 },
     shadowRadius: 2,
     shadowOpacity: 0.4,
     padding: 10,
+    backgroundColor: "white",
   },
   padnelHeader: {
     alignItems: "center",
@@ -215,16 +214,18 @@ const styles = StyleSheet.create({
     width: 30,
     height: 5,
     borderRadius: 4,
-    backgroundColor: "#00000040",
+    backgroundColor: appColors.panelHandle,
     marginBottom: 10,
   },
   content: {
     alignItems: "center",
-    padding: 20,
-    height: 250,
+    justifyContent: "space-around",
+    backgroundColor: appColors.bottomSheetContent,
+    height: 280,
   },
+
   comment: {
-    backgroundColor: "white",
+    backgroundColor: appColors.bottomSheetComment,
     padding: 20,
     height: 300,
   },
@@ -232,14 +233,17 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "white",
+    backgroundColor: appColors.bottomSheetComment,
     height: 300,
   },
+  buttonContainer: { justifyContent: "center", alignItems: "center" },
+  textContainer: { justifyContent: "center", alignItems: "center" },
 });
 
 const mapStateToProps = (state) => {
   return {
     comments: state.auth.comments,
+    users: state.pts.users,
   };
 };
 

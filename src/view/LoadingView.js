@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { appColors } from "../shared/global/colors/colors";
 const LoadingScreen = () => {
   return (
     <View style={styles.container}>
@@ -14,6 +15,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "darkgray",
+    backgroundColor: appColors.LoadingScreenBgColor,
   },
 });

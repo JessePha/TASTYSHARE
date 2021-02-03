@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, createRef } from "react";
 import {
   View,
   Image,
@@ -14,9 +14,10 @@ import CustomButton from "../components/UI/CustomButton";
 import { connect } from "react-redux";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { addImage } from "../handleCamera/handleCamera";
-import { projectFirestore } from "../../config/config";
 import { useTheme } from "@react-navigation/native";
 import firebase from "firebase";
+import { onAddPost } from "../handleLikesAndFollows/handlePost";
+import LoadingScreen from "../view/LoadingView";
 
 const AddPostView = ({ navigation, currentUser }) => {
   const [image, setImage] = useState(null);
@@ -29,13 +30,14 @@ const AddPostView = ({ navigation, currentUser }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   let type = "posts";
   const { colors } = useTheme();
+  const clearText = createRef();
   const post = {
     title: title.trim(),
     price: price.trim(),
     category: category.trim(),
     description: description.trim(),
     location: location.trim(),
-    user: currentUser.uid,
+    user: currentUser !== null && currentUser.uid,
     imageuri: image,
     likesCount: 0,
     createAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -49,26 +51,22 @@ const AddPostView = ({ navigation, currentUser }) => {
     setDescription("");
   };
 
-  const addPost = (post) => {
+  const addPost = (currentUser, post, setLoading) => {
     setLoading(true);
+    if (currentUser !== null) {
+      onAddPost(currentUser, post, setLoading);
+    }
     cancelPost();
-    resetForm();
-    projectFirestore
-      .collection("posts")
-      .doc(currentUser.uid)
-      .collection("userPosts")
-      .add(post)
-      .then(() => {
-        setLoading(false);
-      })
-      .catch((error) => console.log(error));
   };
 
   const cancelPost = () => {
     setImage(null);
     resetForm();
+    clearText.current.clear();
     navigation.navigate("Home");
   };
+
+  if (loading) return <LoadingScreen />;
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -99,30 +97,35 @@ const AddPostView = ({ navigation, currentUser }) => {
               text="Title"
               handleInput={setTitle}
               textColor={colors.text}
+              createRef={clearText}
             />
             <CustomTextInput
               space={10}
               text="Price"
               handleInput={setPrice}
               textColor={colors.text}
+              createRef={clearText}
             />
             <CustomTextInput
               space={10}
               text="Category"
               handleInput={setCategory}
               textColor={colors.text}
-            />
-            <CustomTextInput
-              space={10}
-              text="Description"
-              handleInput={setDescription}
-              textColor={colors.text}
+              createRef={clearText}
             />
             <CustomTextInput
               space={10}
               text="Location"
               handleInput={setLocation}
               textColor={colors.text}
+              createRef={clearText}
+            />
+            <CustomTextInput
+              space={10}
+              text="Description"
+              handleInput={setDescription}
+              textColor={colors.text}
+              createRef={clearText}
             />
           </ScrollView>
         </View>
@@ -131,7 +134,7 @@ const AddPostView = ({ navigation, currentUser }) => {
             text="Post"
             color="white"
             backgroundColor="#00C2FF"
-            onClick={() => addPost(post)}
+            onClick={() => addPost(currentUser.uid, post, setLoading)}
           />
           <CustomButton
             text="Cancel"

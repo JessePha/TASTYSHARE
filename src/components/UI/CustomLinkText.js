@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { appColors } from "../../shared/global/colors/colors";
 
 const CustomLinkText = ({ text, onClick, textColor }) => {
   let style = styles.linkText;
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   linkText: {
-    color: "#C4C4C4",
+    color: appColors.linkText,
     textAlign: "right",
   },
 });

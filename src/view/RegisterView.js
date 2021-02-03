@@ -18,6 +18,7 @@ import {
   isValidPassword,
 } from "../handleValidtion/validation";
 import { auth, projectFirestore } from "../../config/config";
+import LoadingScreen from "../view/LoadingView";
 
 const RegisterView = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,7 +38,7 @@ const RegisterView = ({ navigation }) => {
       msg: msg.length > 0 && msg[0].msg,
     },
     {
-      text: "LastName",
+      text: "Lastname",
       inputValue: lastname,
       handleInput: setLastName,
       isValid: msg.length > 0 && msg[1].isValid,
@@ -103,6 +104,8 @@ const RegisterView = ({ navigation }) => {
     }
   };
 
+  if (loading) return <LoadingScreen />;
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -146,6 +149,7 @@ const RegisterView = ({ navigation }) => {
                   <CustomeInput
                     key={text + `${index}`}
                     text={text.text}
+                    textColor="white"
                     handleInput={text.handleInput}
                     showPassword={text.showPassword}
                     setShowPassword={text.setShowPassword}

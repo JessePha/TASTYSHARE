@@ -8,9 +8,12 @@ import {
   filterByCategoryDsc,
   filterByLocationDsc,
 } from "../../handleFilter/handleFilter";
+import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
+import * as actionType from "../../shared/global/globalstates/actions/actionTypes";
+import { appColors } from "../../shared/global/colors/colors";
 
-const bottomSheet = ({ bs, fall, posts, setFilteredData }) => {
+const FilterBottomSheet = ({ bs, fall, posts, getAllPosts }) => {
   const { colors } = useTheme();
   const header = () => (
     <View style={styles.header}>
@@ -24,31 +27,38 @@ const bottomSheet = ({ bs, fall, posts, setFilteredData }) => {
     <View style={{ ...styles.content, backgroundColor: colors.background }}>
       <TouchableOpacity
         onPress={() => {
-          setFilteredData(filterByDateAsc(posts)), bs.current.snapTo(1);
+          getAllPosts(filterByDateAsc(posts), bs.current.snapTo(1));
         }}
       >
         <Text style={{ color: colors.text }}>Date</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          setFilteredData(filterByPopularityAsc(posts)), bs.current.snapTo(1);
+          getAllPosts(filterByPopularityAsc(posts)), bs.current.snapTo(1);
         }}
       >
         <Text style={{ color: colors.text }}>Popularity</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          setFilteredData(filterByCategoryDsc(posts)), bs.current.snapTo(1);
+          getAllPosts(filterByCategoryDsc(posts)), bs.current.snapTo(1);
         }}
       >
         <Text style={{ color: colors.text }}>Category</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          setFilteredData(filterByLocationDsc(posts)), bs.current.snapTo(1);
+          getAllPosts(filterByLocationDsc(posts)), bs.current.snapTo(1);
         }}
       >
         <Text style={{ color: colors.text }}>Location</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          getAllPosts(posts), bs.current.snapTo(1);
+        }}
+      >
+        <Text style={{ color: colors.text }}>Default</Text>
       </TouchableOpacity>
     </View>
   );
@@ -69,8 +79,8 @@ const bottomSheet = ({ bs, fall, posts, setFilteredData }) => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "white",
-    shadowColor: "black",
+    backgroundColor: appColors.bottomSheetHeaderBgColor,
+    shadowColor: appColors.shadowColor,
     shadowOffset: { width: -1, height: -3 },
     shadowRadius: 2,
     shadowOpacity: 0.4,
@@ -85,15 +95,23 @@ const styles = StyleSheet.create({
     width: 30,
     height: 5,
     borderRadius: 4,
-    backgroundColor: "#00000040",
+    backgroundColor: appColors.panelHandle,
     marginBottom: 10,
   },
   content: {
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: appColors.bottomSheetContent,
     padding: 10,
     height: 130,
   },
 });
 
-export default bottomSheet;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getAllPosts: (posts) => {
+      dispatch({ type: actionType.GET_ALL_POSTS, payload: posts });
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(FilterBottomSheet);

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, Image } from "react-native";
+import { appColors } from "../../../shared/global/colors/colors";
 
 const Post = ({ item, navigation }) => {
   return (
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
   Image: {
     width: 300,
     height: 300,
-    backgroundColor: "#C4C4C4",
+    backgroundColor: appColors.imageBgColor,
   },
 });
 

@@ -12,7 +12,9 @@ const UserCustomBar = ({ image, text, textColor, bgColor }) => {
         </View>
       </View>
       <View style={styles.textContainer}>
-        <Text style={{ color: textColor }}>{text}</Text>
+        <Text numberOfLines={1} style={{ color: textColor }}>
+          {text}
+        </Text>
       </View>
     </View>
   );
@@ -23,8 +25,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userCustomBarInnerContainer: {
-    flex: 2,
-    justifyContent: "center",
+    flex: 4,
+    justifyContent: "flex-end",
     alignItems: "center",
     marginTop: 20,
     marginBottom: 10,
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textContainer: {
-    flex: 1,
+    flex: 2,
     alignItems: "center",
   },
 });

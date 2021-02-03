@@ -2,7 +2,9 @@ import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { appColors } from "../../shared/global/colors/colors";
 
 const CommentBar = ({
   text,
@@ -14,6 +16,9 @@ const CommentBar = ({
   currentUser,
   onDeleteComment,
   post,
+  setEditComment,
+  bs,
+  bs1,
 }) => {
   return (
     <View
@@ -34,7 +39,7 @@ const CommentBar = ({
               display: "flex",
               width: 30,
               height: 30,
-              backgroundColor: "#5A595B",
+              backgroundColor: appColors.commentBarUserContainerBgColor,
               borderRadius: 15,
               justifyContent: "center",
               alignItems: "center",
@@ -60,6 +65,24 @@ const CommentBar = ({
             </TouchableOpacity>
           ) : null}
         </View>
+        <View style={{ position: "absolute", right: 30, top: 5 }}>
+          {currentUser === userID ? (
+            <TouchableOpacity
+              onPress={() => {
+                bs1.current.snapTo(0),
+                  bs.current.snapTo(1),
+                  setEditComment({
+                    text: text,
+                    postID: post.postID,
+                    userID: post.user,
+                    commentID: commentID,
+                  });
+              }}
+            >
+              <Feather name="edit-2" size={15} color="white" />
+            </TouchableOpacity>
+          ) : null}
+        </View>
       </View>
     </View>
   );
@@ -68,14 +91,14 @@ const CommentBar = ({
 const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
-    backgroundColor: "gray",
+    backgroundColor: appColors.commentBarTextContainerBgColor,
     padding: 15,
     marginBottom: 15,
     borderRadius: 5,
     marginLeft: 10,
   },
   text: {
-    color: "white",
+    color: appColors.text,
   },
   displayName: {
     fontSize: 10,

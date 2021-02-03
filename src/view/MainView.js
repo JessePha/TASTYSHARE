@@ -1,66 +1,74 @@
 import React, { useEffect, createRef, useState, useCallback } from "react";
-import { View, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { Drawer } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Posts from "../components/Posts/Posts";
-import { projectFirestore } from "../../config/config";
 import { connect } from "react-redux";
 import * as actionType from "../shared/global/globalstates/actions/actionTypes";
-import BottomSheet from "../components/BottomSheet/BottomSheet";
 import FilterBottomSheet from "../components/BottomSheet/FilterBottomSheet";
+import { getPosts } from "../handleLikesAndFollows/handlePost";
 import Animated from "react-native-reanimated";
+import BottomSheet from "../components/BottomSheet/BottomSheet";
+import { projectFirestore } from "../../config/config";
+import { fetchFollowers } from "../handleLikesAndFollows/handleFollow";
+import { MaterialIcons } from "@expo/vector-icons";
 
-const MainView = ({ navigation, getAllPosts, posts, likes, authenticated }) => {
+const MainView = ({
+  navigation,
+  getAllPosts,
+  posts,
+  likes,
+  authenticated,
+  getUsers,
+  users,
+  getFollowers,
+}) => {
   const bs = createRef();
   const fall = new Animated.Value(1);
   const bs1 = createRef();
   const fall1 = new Animated.Value(1);
   const [refreshing, setRefreshing] = useState(false);
-  const data = posts.slice();
-  const [filteredData, setFilteredData] = useState(data);
   const { colors } = useTheme();
 
   useEffect(() => {
-    const unsubscribe = async () => {
-      const querySnapshot = await projectFirestore.collection("users").get();
-      const data = [];
-      let getData = [];
-      querySnapshot.forEach((user) => {
-        getData.push(
-          new Promise((resolve) => {
-            projectFirestore
-              .collection("posts")
-              .doc(user.id)
-              .collection("userPosts")
-              .get()
-              .then((posts) => {
-                posts.forEach((post) => {
-                  data.push({
-                    ...post.data(),
-                    postID: post.id,
-                    userInfo: user.data(),
-                  });
-                });
-                resolve(data);
-              });
-          })
-        );
-      });
-      Promise.all(getData).then(() => {
-        getAllPosts(data);
-        setRefreshing(false);
-      });
-    };
-    unsubscribe();
-    return () => unsubscribe();
-  }, [refreshing]);
+    if (users.length > 0) {
+      getPosts(users, getAllPosts, setRefreshing);
+    }
+  }, [refreshing, users]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
   }, [refreshing]);
 
-  return (
+  useEffect(() => {
+    projectFirestore
+      .collection("users")
+      .get()
+      .then((snapshot) => {
+        let users = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          const id = doc.id;
+          return { ...data, id };
+        });
+        getUsers(users);
+      })
+      .catch(() => console.log("something went wrong"));
+  }, [refreshing]);
+
+  useEffect(() => {
+    if (users.length > 0) {
+      fetchFollowers(users, getFollowers);
+    }
+  }, [users]);
+
+  return posts.length > 0 ? (
     <View style={{ flex: 1 }}>
       <Drawer.Section>
         <View
@@ -85,21 +93,31 @@ const MainView = ({ navigation, getAllPosts, posts, likes, authenticated }) => {
       <View style={{ flex: 8 }}>
         <Posts
           navigation={navigation}
-          posts={filteredData.length > 0 ? filteredData : posts}
-          bs={bs}
+          posts={posts}
           onRefresh={onRefresh}
           refreshing={refreshing}
           authenticated={authenticated}
           likes={likes}
         />
       </View>
-      <FilterBottomSheet
-        bs={bs1}
-        fall={fall1}
-        posts={posts && posts}
-        setFilteredData={setFilteredData}
-      />
+      <FilterBottomSheet bs={bs1} fall={fall1} posts={posts && posts} />
       <BottomSheet bs={bs} fall={fall} navigation={navigation} />
+    </View>
+  ) : (
+    <View style={{ flex: 1 }}>
+      <ScrollView
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <MaterialIcons name="playlist-add" size={80} color="darkgray" />
+        <Text style={colors.text}>There are no posts</Text>
+      </ScrollView>
     </View>
   );
 };
@@ -108,7 +126,7 @@ const mapStateToProps = (state) => {
   return {
     posts: state.pts.posts,
     authenticated: state.auth,
-    likes: state.auth.likes,
+    users: state.pts.users,
   };
 };
 
@@ -117,6 +135,10 @@ const mapDispatchToProps = (dispatch) => {
     getAllPosts: (posts) => {
       dispatch({ type: actionType.GET_ALL_POSTS, payload: posts });
     },
+    getFollowers: (followers) =>
+      dispatch({ type: actionType.GET_FOLLOWERS, payload: followers }),
+    getUsers: (users) =>
+      dispatch({ type: actionType.GET_USERS, payload: users }),
   };
 };
 
