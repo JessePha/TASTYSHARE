@@ -3,9 +3,12 @@ import UserPost from "./post/UserPost";
 import { View, FlatList } from "react-native";
 import Animated from "react-native-reanimated";
 import EditPostBottomSheet from "../BottomSheet/EditPostBottomSheet";
-import { updatePost, onDelete } from "../../handleLikesAndFollows/handlePost";
+import {
+  updatePost,
+  onDelete,
+} from "../../handleLikesFollowsCommentsPosts/handlePost";
 
-const UserPosts = ({ posts, navigation }) => {
+const UserPosts = ({ posts, navigation, alertMessage }) => {
   const bs = createRef();
   const fall = new Animated.Value(1);
   const [postInfo, setPostInfo] = useState({});
@@ -47,7 +50,7 @@ const UserPosts = ({ posts, navigation }) => {
     if (uPost.imageuri !== null)
       updateData = { ...updateData, imageuri: uPost.imageuri };
 
-    updatePost(updateData);
+    updatePost(updateData, alertMessage);
     bs.current.snapTo(1);
   };
   return (
@@ -61,6 +64,7 @@ const UserPosts = ({ posts, navigation }) => {
             navigation={navigation}
             onDelete={onDelete}
             onEdit={onEdit}
+            alertMessage={alertMessage}
           />
         )}
       />

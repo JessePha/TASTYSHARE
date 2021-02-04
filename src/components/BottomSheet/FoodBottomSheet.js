@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import BottomSheet from "reanimated-bottom-sheet";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 // import GeoCoder from "react-native-geocoding";
 import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
-import { handleOnLike } from "../../handleLikesAndFollows/handleLikes";
+import { handleOnLike } from "../../handleLikesFollowsCommentsPosts/handleLikes";
 import { appColors } from "../../shared/global/colors/colors";
 // GeoCoder.init("AIzaSyBlcHfmNg4AXbWkHg72eX5HSCGBcSgteoQ");
 
@@ -22,6 +21,7 @@ const FoodBottomSheet = ({
   like,
   setLike,
   comments,
+  alertMessage,
 }) => {
   const [location, setLocation] = useState();
   const [countLikes, setCountLikes] = useState(item.likesCount);
@@ -113,7 +113,8 @@ const FoodBottomSheet = ({
                 setLike,
                 countLikes,
                 setCountLikes,
-                bs
+                bs,
+                alertMessage
               )
             }
           />

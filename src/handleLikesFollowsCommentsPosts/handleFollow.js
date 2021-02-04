@@ -32,7 +32,7 @@ export const fetchFollowers = (users, getFollowers) => {
             });
             resolve((data = { ...data, [user.id]: [...followers] }));
           })
-          .catch((err) => console.log("error"));
+          .catch();
       })
     )
   );
@@ -49,8 +49,8 @@ export const onFollow = (userID, postUser, setFollowingState) => {
     .collection("userFollowing")
     .doc(postUser)
     .set({})
-    .then(() => console.log("You follow an user"))
-    .catch((err) => console.log("Something went wrong. Unable to follow"));
+    .then()
+    .catch();
 };
 export const onUnfollow = (userID, postUser, setFollowingState) => {
   setFollowingState(false);
@@ -60,6 +60,6 @@ export const onUnfollow = (userID, postUser, setFollowingState) => {
     .collection("userFollowing")
     .doc(postUser)
     .delete()
-    .then(() => console.log("You unfollow a user"))
-    .catch(() => console.log("Something went wrong. Unable to unfollow"));
+    .then()
+    .catch();
 };

@@ -1,7 +1,7 @@
 import firebase from "firebase";
 import { projectFirestore } from "../../config/config";
 
-export const updatePost = (updateData, setMessage) => {
+export const updatePost = (updateData, alertMessage) => {
   projectFirestore
     .collection("posts")
     .doc(updateData.user)
@@ -18,19 +18,19 @@ export const updatePost = (updateData, setMessage) => {
       title: updateData.title,
       user: updateData.user,
     })
-    .then(() => console.log("Successfully update post"))
-    .catch((err) => console.log("An error occur, try again"));
+    .then(() => alertMessage("Successfully update post"))
+    .catch((err) => alertMessage("An error occur, try again"));
 };
 
-export const onDelete = (userID, postID, deletePost, setMessage) => {
+export const onDelete = (userID, postID, deletePost, alertMessage) => {
   projectFirestore
     .collection("posts")
     .doc(userID)
     .collection("userPosts")
     .doc(postID)
     .delete()
-    .then(() => console.log("Succesfully delete post"))
-    .catch((err) => console.log("An error occur, please try again"));
+    .then(() => alertMessage("Succesfully delete post"))
+    .catch((err) => alertMessage("An error occur, please try again"));
   deletePost(postID);
 };
 
@@ -43,7 +43,7 @@ export const onAddPost = (userID, post, setLoading) => {
     .then(() => {
       setLoading(false);
     })
-    .catch((error) => console.log(error));
+    .catch();
 };
 
 export const getPosts = (users, getAllPosts, setRefreshing) => {
@@ -66,7 +66,8 @@ export const getPosts = (users, getAllPosts, setRefreshing) => {
               });
             });
             resolve(data);
-          });
+          })
+          .catch();
       })
     );
   });

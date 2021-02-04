@@ -19,6 +19,7 @@ const CommentBar = ({
   setEditComment,
   bs,
   bs1,
+  alertMessage,
 }) => {
   return (
     <View
@@ -59,7 +60,7 @@ const CommentBar = ({
         <View style={{ position: "absolute", right: 0 }}>
           {currentUser === userID ? (
             <TouchableOpacity
-              onPress={() => onDeleteComment(post.user, post.postID, commentID)}
+              onPress={() => onDeleteComment(post.user, post.postID, commentID, alertMessage)}
             >
               <Entypo name="cross" size={25} color="white" />
             </TouchableOpacity>

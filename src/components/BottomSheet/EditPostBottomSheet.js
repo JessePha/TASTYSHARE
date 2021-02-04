@@ -99,7 +99,6 @@ const bottomSheet = ({ bs, fall, postInfo, edit }) => {
                 textColor={colors.text}
               />
               <CustomTextInput
-                space={10}
                 text="Location"
                 handleInput={setLocation}
                 textColor={colors.text}
@@ -128,7 +127,7 @@ const bottomSheet = ({ bs, fall, postInfo, edit }) => {
     <>
       <BottomSheet
         ref={bs}
-        snapPoints={["80%", 0]}
+        snapPoints={["85%", 0]}
         renderContent={content}
         initialSnap={1}
         callbackNode={fall}
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: "darkgray",
   },
   imageContainer: {
-    height: 350,
+    height: 250,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -181,10 +180,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   inputContainer: {
-    height: 300,
+    height: 400,
     justifyContent: "center",
     paddingLeft: 20,
     paddingRight: 20,
+    
   },
   buttonContainer: {
     justifyContent: "center",

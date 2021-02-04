@@ -8,15 +8,16 @@ export const handleOnLike = (
   setLike,
   countLikes,
   setCountLikes,
-  bs
+  bs,
+  alertMessage,
 ) => {
   if (authenticated.isSignedIn) {
     if (like) {
-      onDislike(userID, postID, authenticated);
+      onDislike(userID, postID, authenticated, alertMessage);
       if (countLikes > 0) setCountLikes(countLikes - 1);
       else setCountLikes(0);
     } else {
-      onLike(userID, postID, authenticated);
+      onLike(userID, postID, authenticated, alertMessage);
       setCountLikes(countLikes + 1);
     }
     setLike(!like);
@@ -40,7 +41,7 @@ export const getLikes = (authenticated, userID, postID, setLike) => {
     });
 };
 
-const onLike = (userID, postID, authenticated) => {
+const onLike = (userID, postID, authenticated, alertMessage) => {
   projectFirestore
     .collection("posts")
     .doc(userID)
@@ -49,11 +50,11 @@ const onLike = (userID, postID, authenticated) => {
     .collection("likes")
     .doc(authenticated.currentUser.uid)
     .set({})
-    .then(() => console.log("You like a post"))
-    .catch((err) => console.log("Something went wrong. Unable to like"));
+    .then(() => alertMessage("You like a post"))
+    .catch((err) => alertMessage("Something went wrong. Unable to like"));
 };
 
-const onDislike = (userID, postID, authenticated) => {
+const onDislike = (userID, postID, authenticated, alertMessage) => {
   projectFirestore
     .collection("posts")
     .doc(userID)
@@ -62,6 +63,6 @@ const onDislike = (userID, postID, authenticated) => {
     .collection("likes")
     .doc(authenticated.currentUser.uid)
     .delete()
-    .then(() => console.log("You dislike a post"))
-    .catch((err) => console.log("Something went wrong. Unable to dislike"));
+    .then(() => alertMessage("You dislike a post"))
+    .catch((err) => alertMessage("Something went wrong. Unable to dislike"));
 };

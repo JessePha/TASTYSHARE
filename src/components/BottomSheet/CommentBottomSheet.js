@@ -17,7 +17,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import CommentBar from "../UI/CommentBar";
 import { connect } from "react-redux";
 import * as actionTypes from "../../shared/global/globalstates/actions/actionTypes";
-import { getAllComments } from "../../handleLikesAndFollows/handleComments";
+import { getAllComments } from "../../handleLikesFollowsCommentsPosts/handleComments";
 import { appColors } from "../../shared/global/colors/colors";
 
 const bottomSheet = ({
@@ -34,6 +34,7 @@ const bottomSheet = ({
   users,
   getComments,
   comments,
+  alertMessage,
 }) => {
   const [text, setText] = useState();
   const [commentState, setCommentState] = useState(false);
@@ -52,7 +53,14 @@ const bottomSheet = ({
     Keyboard.dismiss;
     setText("");
     clearText.current.clear();
-    handleOnComment(authenticated, post.user, post.postID, bs, text);
+    handleOnComment(
+      authenticated,
+      post.user,
+      post.postID,
+      bs,
+      text,
+      alertMessage
+    );
     bs.current.snapTo(1);
   };
 
@@ -128,6 +136,7 @@ const bottomSheet = ({
                   post={post}
                   bs={bs}
                   bs1={bs2}
+                  alertMessage={alertMessage}
                 />
               )}
             />

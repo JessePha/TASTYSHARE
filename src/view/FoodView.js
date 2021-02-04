@@ -11,7 +11,7 @@ import {
 import {
   handleOnComment,
   onDeleteComment,
-} from "../handleLikesAndFollows/handleComments";
+} from "../handleLikesFollowsCommentsPosts/handleComments";
 import Animated from "react-native-reanimated";
 import BottomSheet from "../components/BottomSheet/BottomSheet";
 import CommentBottomSheet from "../components/BottomSheet/CommentBottomSheet";
@@ -19,7 +19,7 @@ import FoodBottomSheet from "../components/BottomSheet/FoodBottomSheet";
 import EditCommentSheet from "../components/BottomSheet/EditCommentSheet";
 import { connect } from "react-redux";
 import PostImage from "../components/UI/PostImage";
-import { getLikes } from "../handleLikesAndFollows/handleLikes";
+import { getLikes } from "../handleLikesFollowsCommentsPosts/handleLikes";
 import { useTheme } from "@react-navigation/native";
 
 const FoodView = ({ route, navigation, authenticated }) => {
@@ -38,18 +38,21 @@ const FoodView = ({ route, navigation, authenticated }) => {
   const [like, setLike] = useState(false);
   const [editComment, setEditComment] = useState({});
   const [showMessage, setShowMessage] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-      if (authenticated.currentUser) {
-        getLikes(
-          authenticated.currentUser.uid,
-          item.user,
-          item.postID,
-          setLike
-        );
-      }
-    
+    if (authenticated.currentUser) {
+      getLikes(authenticated.currentUser.uid, item.user, item.postID, setLike);
+    }
   }, [like]);
+
+  const alertMessage = (msg) => {
+    setMessage(msg);
+    setShowMessage(true);
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 900);
+  };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -67,6 +70,7 @@ const FoodView = ({ route, navigation, authenticated }) => {
             authenticated={authenticated}
             like={like}
             setLike={() => setLike()}
+            alertMessage={alertMessage}
           />
           <BottomSheet bs={bs} fall={fall} navigation={navigation} />
           <CommentBottomSheet
@@ -80,10 +84,29 @@ const FoodView = ({ route, navigation, authenticated }) => {
             handleOnComment={handleOnComment}
             onDeleteComment={onDeleteComment}
             setEditComment={setEditComment}
+            alertMessage={alertMessage}
           />
-          <EditCommentSheet bs={bs2} fall={fall2} editComment={editComment} />
+          <EditCommentSheet
+            bs={bs2}
+            fall={fall2}
+            editComment={editComment}
+            alertMessage={alertMessage}
+          />
           {showMessage ? (
-            <View style={{ backgroundColor: "black", width: 200, height: 500 }}>
+            <View
+              style={{
+                width: 200,
+                height: 40,
+                backgroundColor: "gray",
+                position: "absolute",
+                zIndex: 100,
+                bottom: 20,
+                borderRadius: 3,
+                left: Dimensions.get("screen").width / 4,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <Text style={{ color: "white" }}>{message}</Text>
             </View>
           ) : null}

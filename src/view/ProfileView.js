@@ -10,7 +10,7 @@ import {
   onFollow,
   onUnfollow,
   getFollowings,
-} from "../handleLikesAndFollows/handleFollow";
+} from "../handleLikesFollowsCommentsPosts/handleFollow";
 import * as actionTypes from "../shared/global/globalstates/actions/actionTypes";
 import { AntDesign } from "@expo/vector-icons";
 

@@ -10,11 +10,11 @@ import {
 } from "react-native";
 import BottomSheet from "reanimated-bottom-sheet";
 import { useTheme } from "@react-navigation/native";
-import { onEditComment } from "../../handleLikesAndFollows/handleComments";
+import { onEditComment } from "../../handleLikesFollowsCommentsPosts/handleComments";
 import { Entypo } from "@expo/vector-icons";
 import { appColors } from "../../shared/global/colors/colors";
 
-const EditCommentSheet = ({ bs, fall, editComment, setMessage }) => {
+const EditCommentSheet = ({ bs, fall, editComment, alertMessage }) => {
   const [text, setText] = useState(editComment.text);
   const { colors } = useTheme();
   const clearText = createRef();
@@ -52,7 +52,8 @@ const EditCommentSheet = ({ bs, fall, editComment, setMessage }) => {
                     setText,
                     clearText,
                     Keyboard,
-                    bs
+                    bs,
+                    alertMessage
                   )
                 }
               />

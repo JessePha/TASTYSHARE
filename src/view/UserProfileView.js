@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Image, StyleSheet, Text } from "react-native";
+import React, { useState } from "react";
+import { View, Image, StyleSheet, Text, Dimensions } from "react-native";
 import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
 import CustomBar from "../components/UI/CustomBar";
@@ -9,10 +9,20 @@ import { AntDesign } from "@expo/vector-icons";
 const UserProfileView = ({ allPosts, navigation, authenticated, route }) => {
   const { colors } = useTheme();
   const { item } = route.params;
+  const [showMessage, setShowMessage] = useState(false);
+  const [message, setMessage] = useState("");
   const userPosts = allPosts.filter(
     (post) => post.user === authenticated.currentUser.uid
   );
-  
+
+  const alertMessage = (msg) => {
+    setMessage(msg);
+    setShowMessage(true);
+    setTimeout(() => {
+      setShowMessage(false);
+    }, 900);
+  };
+
   return userPosts.length > 0 ? (
     <View style={{ ...styles.container, backgroundColor: colors.background }}>
       <View style={styles.profileContainer}>
@@ -51,9 +61,31 @@ const UserProfileView = ({ allPosts, navigation, authenticated, route }) => {
       </View>
       <View style={styles.postsContainer}>
         <View style={styles.postsInnerContainer}>
-          <UserPosts posts={userPosts} navigation={navigation} />
+          <UserPosts
+            posts={userPosts}
+            navigation={navigation}
+            alertMessage={alertMessage}
+          />
         </View>
       </View>
+      {showMessage ? (
+        <View
+          style={{
+            width: 200,
+            height: 40,
+            backgroundColor: "gray",
+            position: "absolute",
+            zIndex: 100,
+            bottom: 20,
+            borderRadius: 3,
+            left: Dimensions.get("screen").width / 4,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: "white" }}>{message}</Text>
+        </View>
+      ) : null}
     </View>
   ) : (
     <View
@@ -61,6 +93,24 @@ const UserProfileView = ({ allPosts, navigation, authenticated, route }) => {
     >
       <AntDesign name="meh" size={34} color={colors.text} />
       <Text style={{ color: colors.text }}>You don't have any post</Text>
+      {showMessage ? (
+        <View
+          style={{
+            width: 200,
+            height: 40,
+            backgroundColor: "gray",
+            position: "absolute",
+            zIndex: 100,
+            bottom: 20,
+            borderRadius: 3,
+            left: Dimensions.get("screen").width / 4,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: "white" }}>{message}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };

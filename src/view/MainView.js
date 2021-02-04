@@ -13,11 +13,11 @@ import Posts from "../components/Posts/Posts";
 import { connect } from "react-redux";
 import * as actionType from "../shared/global/globalstates/actions/actionTypes";
 import FilterBottomSheet from "../components/BottomSheet/FilterBottomSheet";
-import { getPosts } from "../handleLikesAndFollows/handlePost";
+import { getPosts } from "../handleLikesFollowsCommentsPosts/handlePost";
 import Animated from "react-native-reanimated";
 import BottomSheet from "../components/BottomSheet/BottomSheet";
 import { projectFirestore } from "../../config/config";
-import { fetchFollowers } from "../handleLikesAndFollows/handleFollow";
+import { fetchFollowers } from "../handleLikesFollowsCommentsPosts/handleFollow";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const MainView = ({

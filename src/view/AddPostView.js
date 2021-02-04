@@ -16,7 +16,7 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { addImage } from "../handleCamera/handleCamera";
 import { useTheme } from "@react-navigation/native";
 import firebase from "firebase";
-import { onAddPost } from "../handleLikesAndFollows/handlePost";
+import { onAddPost } from "../handleLikesFollowsCommentsPosts/handlePost";
 import LoadingScreen from "../view/LoadingView";
 
 const AddPostView = ({ navigation, currentUser }) => {

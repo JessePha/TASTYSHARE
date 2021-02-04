@@ -13,8 +13,12 @@ import { useTheme } from "@react-navigation/native";
 import { connect } from "react-redux";
 import * as actionTypes from "../../../shared/global/globalstates/actions/actionTypes";
 
-const UserPost = ({ item, onDelete, onEdit, deletePost }) => {
+const UserPost = ({ item, onDelete, onEdit, deletePost, alertMessage }) => {
   const { colors } = useTheme();
+
+  const deleteF = (userID, postID, deletePost, alertMessage) => {
+    onDelete(userID, postID, deletePost, alertMessage);
+  };
 
   const LeftAction = ({ progress, dragX, onPress }) => {
     const scale = dragX.interpolate({
@@ -25,7 +29,9 @@ const UserPost = ({ item, onDelete, onEdit, deletePost }) => {
     return (
       <TouchableOpacity
         style={styles.detleteContainer}
-        onPress={() => onPress(item.user, item.postID, deletePost)}
+        onPress={() =>
+          onPress(item.user, item.postID, deletePost, alertMessage)
+        }
       >
         <Animated.Text style={[styles.deleteText, { transform: [{ scale }] }]}>
           Delete
@@ -51,13 +57,12 @@ const UserPost = ({ item, onDelete, onEdit, deletePost }) => {
       </TouchableOpacity>
     );
   };
-  const handleDelete = () => {};
 
   return (
     <>
       <Swipable
         renderLeftActions={(progress, dragX) => (
-          <LeftAction progress={progress} dragX={dragX} onPress={onDelete} />
+          <LeftAction progress={progress} dragX={dragX} onPress={deleteF} />
         )}
         renderRightActions={(progress, dragX) => (
           <RightAction progress={progress} dragX={dragX} onPress={onEdit} />
@@ -154,7 +159,7 @@ const styles = StyleSheet.create({
   },
   editText: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 15,
   },
 });
 

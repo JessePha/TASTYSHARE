@@ -1,8 +1,15 @@
 import { projectFirestore } from "../../config/config";
 
-export const handleOnComment = (authenticated, userID, postID, bs, text) => {
+export const handleOnComment = (
+  authenticated,
+  userID,
+  postID,
+  bs,
+  text,
+  alertMessage
+) => {
   if (authenticated.isSignedIn) {
-    onComment(userID, postID, authenticated, text);
+    onComment(userID, postID, authenticated, text, alertMessage);
   } else {
     bs.current.snapTo(0);
   }
@@ -31,7 +38,7 @@ export const getAllComments = (userID, postID, users, getComments) => {
     });
 };
 
-const onComment = (userID, postID, authenticated, text) => {
+const onComment = (userID, postID, authenticated, text, alertMessage) => {
   if (text !== "" && text !== undefined) {
     projectFirestore
       .collection("posts")
@@ -43,12 +50,12 @@ const onComment = (userID, postID, authenticated, text) => {
         creator: authenticated.currentUser.uid,
         text: text,
       })
-      .then(() => console.log("You commented on a post"))
-      .catch((err) => console.log("Something went wrong. Unable to comment"));
+      .then(() => alertMessage("You commented on a post"))
+      .catch((err) => alertMessage("Something went wrong. Unable to comment"));
   }
 };
 
-export const onDeleteComment = (userID, postID, commentID) => {
+export const onDeleteComment = (userID, postID, commentID, alertMessage) => {
   projectFirestore
     .collection("posts")
     .doc(userID)
@@ -57,8 +64,8 @@ export const onDeleteComment = (userID, postID, commentID) => {
     .collection("comments")
     .doc(commentID)
     .delete()
-    .then(() => console.log("You delete a comment"))
-    .catch((err) => console.log("Something went wrong. Unable to delete"));
+    .then(() => alertMessage("You delete a comment"))
+    .catch((err) => alertMessage("Something went wrong. Unable to delete"));
 };
 
 export const onEditComment = (
@@ -69,7 +76,8 @@ export const onEditComment = (
   setText,
   clearText,
   Keyboard,
-  bs
+  bs,
+  alertMessage
 ) => {
   if (text !== "" && text !== undefined)
     projectFirestore
@@ -82,8 +90,8 @@ export const onEditComment = (
       .update({
         text: text,
       })
-      .then(() => console.log("You edit a comment"))
-      .catch((err) => console.log("Something went wrong. Unable to edit"));
+      .then(() => alertMessage("You edit a comment"))
+      .catch((err) => alertMessage("Something went wrong. Unable to edit"));
   Keyboard.dismiss;
   setText("");
   clearText.current.clear();
