@@ -12,20 +12,26 @@ import CustomInput from "../components/UI/CustomInput";
 import CustomButton from "../components/UI/CustomButton";
 import { auth } from "../../config/config";
 import { appColors } from "../shared/global/colors/colors";
+import { isValidEmail } from "../handleValidtion/validation";
 
 const ForgetPasswordView = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
   const handlePasswordReset = async (userEmail) => {
-    auth
-      .sendPasswordResetEmail(userEmail)
-      .then(() => {
-        alert("The has sent to your email");
-        navigation.navigate("Log in");
-      })
-      .catch((error) => {
-        alert("Invalid email");
-      });
+    const message = isValidEmail(userEmail);
+    setMessage(message.msg);
+    if (message.isValid) {
+      auth
+        .sendPasswordResetEmail(userEmail)
+        .then(() => {
+          alert("The link has sent to your email");
+          navigation.navigate("Log in");
+        })
+        .catch((error) => {
+          alert("Invalid email");
+        });
+    }
   };
 
   return (
@@ -38,15 +44,15 @@ const ForgetPasswordView = ({ navigation }) => {
           <View style={styles.inputAndButtonContainer}>
             <CustomInput
               text="Email address"
-              space={40}
+              textColor="#fff"
               handleInput={setEmail}
             />
-            <Text style={{ color: "tomato" }}>{message}</Text>
+            <Text style={{ color: "tomato", marginBottom: 10 }}>{message}</Text>
             <CustomButton
               text="Send"
               color="#fff"
               backgroundColor="#00C2FF"
-              onClick={() => handlePasswordReset(email)}
+              onClick={() => handlePasswordReset(email.trim())}
             />
           </View>
         </View>
