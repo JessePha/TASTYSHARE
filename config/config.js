@@ -3,14 +3,22 @@ import "firebase/storage";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/auth";
+import {
+  SECRET_KEY,
+  SECRET_DOMAIN,
+  SECRET_ID,
+  SECRET_BUCKET,
+  SECRET_SENDERID,
+  APP_API,
+} from "@env";
 
 var firebaseConfig = {
-  apiKey: "AIzaSyBlcHfmNg4AXbWkHg72eX5HSCGBcSgteoQ",
-  authDomain: "tastyshare-d7978.firebaseapp.com",
-  projectId: "tastyshare-d7978",
-  storageBucket: "tastyshare-d7978.appspot.com",
-  messagingSenderId: "762457080442",
-  appId: "1:762457080442:web:6861f5d4e1205e196671c3",
+  apiKey: SECRET_KEY,
+  authDomain: SECRET_DOMAIN,
+  projectId: SECRET_ID,
+  storageBucket: SECRET_BUCKET,
+  messagingSenderId: SECRET_SENDERID,
+  appId: APP_API,
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

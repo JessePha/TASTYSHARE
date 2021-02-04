@@ -5,12 +5,13 @@ import BottomSheet from "reanimated-bottom-sheet";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
+import { SECRET_KEY } from "@env";
 // import GeoCoder from "react-native-geocoding";
 import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
 import { handleOnLike } from "../../handleLikesFollowsCommentsPosts/handleLikes";
 import { appColors } from "../../shared/global/colors/colors";
-// GeoCoder.init("AIzaSyBlcHfmNg4AXbWkHg72eX5HSCGBcSgteoQ");
+// GeoCoder.init(SECRET_KEY);
 
 const FoodBottomSheet = ({
   navigation,
