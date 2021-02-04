@@ -3,15 +3,15 @@ import "firebase/storage";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/auth";
-import {
+import getEnvVars from "../enviroment";
+const {
   SECRET_KEY,
   SECRET_DOMAIN,
   SECRET_ID,
   SECRET_BUCKET,
   SECRET_SENDERID,
   APP_API,
-} from "@env";
-
+} = getEnvVars();
 var firebaseConfig = {
   apiKey: SECRET_KEY,
   authDomain: SECRET_DOMAIN,
