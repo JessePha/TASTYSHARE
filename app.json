@@ -10,7 +10,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "privacy": "public",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
