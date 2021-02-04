@@ -67,7 +67,6 @@ const CustomInput = ({
       case "Password":
         return (
           <TextInput
-            multiline
             secureTextEntry={showPassword}
             placeholder={text}
             placeholderTextColor={appColors.inputPlaceHolderColor}
@@ -141,7 +140,6 @@ const CustomInput = ({
         return (
           <TextInput
             multiline
-            secureTextEntry={showPassword}
             placeholder={text}
             placeholderTextColor={appColors.inputPlaceHolderColor}
             underlineColorAndroid={appColors.underlineColorAndroid}

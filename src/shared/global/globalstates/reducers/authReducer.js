@@ -31,6 +31,8 @@ const auth = (state = initialState, action) => {
         following: [],
         likes: [],
       });
+    case actionTypes.IS_LOADING:
+      return updateObject(state, { ...state, isLoading: action.payload });
     case actionTypes.FOLLOWING_USER:
       return updateObject(state, {
         ...state,

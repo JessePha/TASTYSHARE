@@ -15,5 +15,7 @@ export const CHANGE_THEME = "CHANGE_THEME";
 
 export const ON_REFRESH = "ON_REFRESH";
 
+export const IS_LOADING = "IS_LOADING";
+
 export const GET_USERS = "GET_USERS";
 export const GET_FOLLOWERS = "GET_FOLLOWERS";

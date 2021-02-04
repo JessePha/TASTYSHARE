@@ -14,11 +14,12 @@ import Logo from "../components/UI/Logo";
 import { isValidEmail, isValidPassword } from "../handleValidtion/validation";
 import { auth } from "../../config/config";
 import { appColors } from "../shared/global/colors/colors";
+import { connect } from "react-redux";
+import * as actionTypes from "../shared/global/globalstates/actions/actionTypes";
 
-const LoginView = ({ navigation }) => {
+const LoginView = ({ navigation, isLoading, checkLoading }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [msg, setMsg] = useState([]);
   const texts = [
@@ -45,15 +46,14 @@ const LoginView = ({ navigation }) => {
     const validPassword = isValidPassword(password);
     setMsg([{ ...validEmail }, { ...validPassword }]);
     if (validEmail.isValid && validPassword.isValid) {
-      setLoading(true);
+      checkLoading(true);
       try {
         const response = await auth.signInWithEmailAndPassword(email, password);
         if (response) {
-          setLoading(false);
-          navigation.goback();
+          checkLoading(false);
         }
       } catch (error) {
-        setLoading(false);
+        checkLoading(false);
         switch (error.code) {
           case "auth/user-not-found":
             alert("Email does not exist. Try signing Up");
@@ -65,7 +65,7 @@ const LoginView = ({ navigation }) => {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingScreen />;
   }
 
@@ -157,4 +157,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginView;
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.isLoading,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    checkLoading: (loading) =>
+      dispatch({ type: actionTypes.IS_LOADING, payload: loading }),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginView);

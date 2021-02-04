@@ -18,7 +18,6 @@ import Animated from "react-native-reanimated";
 import BottomSheet from "../components/BottomSheet/BottomSheet";
 import { projectFirestore } from "../../config/config";
 import { fetchFollowers } from "../handleLikesFollowsCommentsPosts/handleFollow";
-import { MaterialIcons } from "@expo/vector-icons";
 
 const MainView = ({
   navigation,
@@ -103,23 +102,7 @@ const MainView = ({
       <FilterBottomSheet bs={bs1} fall={fall1} posts={posts && posts} />
       <BottomSheet bs={bs} fall={fall} navigation={navigation} />
     </View>
-  ) : (
-    <View style={{ flex: 1 }}>
-      <ScrollView
-        contentContainerStyle={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <MaterialIcons name="playlist-add" size={80} color="darkgray" />
-        <Text style={colors.text}>There are no posts</Text>
-      </ScrollView>
-    </View>
-  );
+  ) : null;
 };
 
 const mapStateToProps = (state) => {
