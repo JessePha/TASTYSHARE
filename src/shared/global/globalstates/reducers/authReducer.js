@@ -1,4 +1,5 @@
 import * as actionTypes from "../actions/actionTypes";
+import { updateObject } from "../utilities";
 
 const initialState = {
   isLoading: true,
@@ -14,49 +15,49 @@ const initialState = {
 const auth = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SIGN_IN:
-      return {
+      return updateObject(state, {
         ...state,
         isSignedIn: true,
         currentUser: action.payload,
         isLoading: false,
-      };
+      });
 
     case actionTypes.SIGN_OUT:
-      return {
+      return updateObject(state, {
         ...state,
         isSignedIn: false,
         currentUser: null,
         isLoading: false,
         following: [],
         likes: [],
-      };
+      });
     case actionTypes.FOLLOWING_USER:
-      return {
+      return updateObject(state, {
         ...state,
         following: action.payload,
-      };
+      });
     case actionTypes.GET_LIKE_POST:
       const likes = action.payload.slice();
-      return {
+      return updateObject(state, {
         ...state,
         likes: likes,
-      };
+      });
     case actionTypes.GET_COMMENTS:
       const comments = action.payload.slice();
-      return {
+      return updateObject(state, {
         ...state,
         comments: comments,
-      };
+      });
     case actionTypes.CHANGE_THEME:
-      return {
+      return updateObject(state, {
         ...state,
         theme: action.payload,
-      };
+      });
     case actionTypes.ON_REFRESH:
-      return {
+      return updateObject(state, {
         ...state,
         refresh: action.payload,
-      };
+      });
     default:
       return state;
   }

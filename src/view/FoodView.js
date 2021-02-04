@@ -32,7 +32,6 @@ const FoodView = ({ route, navigation, authenticated }) => {
   const bs2 = createRef();
   const fall2 = new Animated.Value(1);
 
-  const { colors } = useTheme();
 
   const { item } = route.params;
   const [like, setLike] = useState(false);

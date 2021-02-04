@@ -15,17 +15,16 @@ import { appColors } from "../shared/global/colors/colors";
 
 const ForgetPasswordView = ({ navigation }) => {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
 
   const handlePasswordReset = async (userEmail) => {
     auth
       .sendPasswordResetEmail(userEmail)
       .then(() => {
-        setMessage("The has sent to your email");
+        alert("The has sent to your email");
         navigation.navigate("Log in");
       })
       .catch((error) => {
-        setMessage("Invalid email");
+        alert("Invalid email");
       });
   };
 
