@@ -32,28 +32,28 @@ const RegisterView = ({ navigation }) => {
   const signUpTexts = [
     {
       text: "Firstname",
-      inputValue: firstname,
+      inputValue: firstname.trim(),
       handleInput: setFirstname,
       isValid: msg.length > 0 && msg[0].isValid,
       msg: msg.length > 0 && msg[0].msg,
     },
     {
       text: "Lastname",
-      inputValue: lastname,
+      inputValue: lastname.trim(),
       handleInput: setLastName,
       isValid: msg.length > 0 && msg[1].isValid,
       msg: msg.length > 0 && msg[1].msg,
     },
     {
       text: "Email address",
-      inputValue: email,
+      inputValue: email.trim(),
       handleInput: setEmail,
       isValid: msg.length > 0 && msg[2].isValid,
       msg: msg.length > 0 && msg[2].msg,
     },
     {
       text: "Password",
-      showPassword: showPassword,
+      showPassword: showPassword.trim(),
       setShowPassword: setShowPassword,
       inputValue: password,
       handleInput: setPassword,

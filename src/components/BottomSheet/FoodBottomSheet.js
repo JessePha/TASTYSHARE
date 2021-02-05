@@ -5,13 +5,10 @@ import BottomSheet from "reanimated-bottom-sheet";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
-import { SECRET_KEY } from "@env";
-// import GeoCoder from "react-native-geocoding";
 import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
 import { handleOnLike } from "../../handleLikesFollowsCommentsPosts/handleLikes";
 import { appColors } from "../../shared/global/colors/colors";
-// GeoCoder.init(SECRET_KEY);
 
 const FoodBottomSheet = ({
   navigation,
@@ -24,7 +21,6 @@ const FoodBottomSheet = ({
   comments,
   alertMessage,
 }) => {
-  const [location, setLocation] = useState();
   const [countLikes, setCountLikes] = useState(item.likesCount);
   const { colors } = useTheme();
   const [isTruncated, setIsTruncated] = useState(true);
@@ -32,25 +28,6 @@ const FoodBottomSheet = ({
     ? item.description.slice(0, 100)
     : item.description;
 
-  const initialRegion = {
-    latitude: 57.930021,
-    longitude: 12.536211,
-    latitudeDelta: 0.095,
-    longitudeDelta: 0.035,
-  };
-  // useEffect(() => {
-  //   if (item.location !== "" && item.location !== undefined) {
-  //     GeoCoder.from(item.location).then((json) => {
-  //       const location = {
-  //         latitude: json.results[0].geometry.viewport.northeast.lat,
-  //         longitude: json.results[0].geometry.viewport.northeast.lng,
-  //         latitudeDelta: 0.095,
-  //         longitudeDelta: 0.035,
-  //       };
-  //       setLocation(location);
-  //     });
-  //   }
-  // }, []);
 
   const onNavigate = (item) => {
     if (authenticated.currentUser) {
@@ -188,32 +165,13 @@ const FoodBottomSheet = ({
           </ScrollView>
         </View>
       </View>
-      {
-        <View
-          style={{ flex: 5, marginTop: 10, backgroundColor: colors.background }}
-        >
-          <MapView
-            style={StyleSheet.absoluteFill}
-            initialRegion={initialRegion}
-            region={location && location}
-          >
-            <Marker
-              coordinate={{
-                latitude: initialRegion.latitude,
-                longitude: initialRegion.longitude,
-              }}
-              title={`${item.location}`}
-            ></Marker>
-          </MapView>
-        </View>
-      }
     </View>
   );
   return (
     <>
       <BottomSheet
         ref={bs}
-        snapPoints={["20%", "60%"]}
+        snapPoints={["20%", "40%"]}
         renderHeader={header}
         renderContent={content}
         initialPosition={"50%"} //200, 300
@@ -270,10 +228,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   userName: { marginLeft: 10 },
-  map: {
-    width: Dimensions.get("screen").width,
-    height: 250,
-  },
 });
 
 const mapStateToProps = (state) => {

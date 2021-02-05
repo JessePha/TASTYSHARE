@@ -48,7 +48,10 @@ const LoginView = ({ navigation, isLoading, checkLoading }) => {
     if (validEmail.isValid && validPassword.isValid) {
       checkLoading(true);
       try {
-        const response = await auth.signInWithEmailAndPassword(email, password);
+        const response = await auth.signInWithEmailAndPassword(
+          email.trim(),
+          password.trim()
+        );
         if (response) {
           checkLoading(false);
         }
