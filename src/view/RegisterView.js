@@ -32,28 +32,28 @@ const RegisterView = ({ navigation }) => {
   const signUpTexts = [
     {
       text: "Firstname",
-      inputValue: firstname.trim(),
+      inputValue: firstname,
       handleInput: setFirstname,
       isValid: msg.length > 0 && msg[0].isValid,
       msg: msg.length > 0 && msg[0].msg,
     },
     {
       text: "Lastname",
-      inputValue: lastname.trim(),
+      inputValue: lastname,
       handleInput: setLastName,
       isValid: msg.length > 0 && msg[1].isValid,
       msg: msg.length > 0 && msg[1].msg,
     },
     {
       text: "Email address",
-      inputValue: email.trim(),
+      inputValue: email,
       handleInput: setEmail,
       isValid: msg.length > 0 && msg[2].isValid,
       msg: msg.length > 0 && msg[2].msg,
     },
     {
       text: "Password",
-      showPassword: showPassword.trim(),
+      showPassword: showPassword,
       setShowPassword: setShowPassword,
       inputValue: password,
       handleInput: setPassword,
@@ -81,8 +81,8 @@ const RegisterView = ({ navigation }) => {
       setLoading(true);
       try {
         const response = await auth.createUserWithEmailAndPassword(
-          email,
-          password
+          email.trim(),
+          password.trim()
         );
         if (response) {
           setLoading(false);

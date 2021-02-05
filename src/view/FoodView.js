@@ -20,7 +20,6 @@ import EditCommentSheet from "../components/BottomSheet/EditCommentSheet";
 import { connect } from "react-redux";
 import PostImage from "../components/UI/PostImage";
 import { getLikes } from "../handleLikesFollowsCommentsPosts/handleLikes";
-import { useTheme } from "@react-navigation/native";
 
 const FoodView = ({ route, navigation, authenticated }) => {
   const bs = createRef();
