@@ -63,6 +63,11 @@ const LoginView = ({ navigation, isLoading, checkLoading }) => {
             break;
           case "auth/invalid-email":
             alert("Please enter an email address");
+          case "auth/wrong-password":
+            alert(`Wrong password`);
+            break;
+          default:
+            alert(error.code);
         }
       }
     }
