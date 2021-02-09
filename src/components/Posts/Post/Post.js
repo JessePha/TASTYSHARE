@@ -15,7 +15,9 @@ import moment from "moment";
 
 const Post = ({ item, navigation, authenticated }) => {
   const { colors } = useTheme();
-
+  const miliseconds =
+    item.createAt.seconds * 1000 + item.createAt.nanoseconds / 1000000;
+  const date = new Date(miliseconds);
   const onNavigate = (item) => {
     if (authenticated.currentUser) {
       item.user === authenticated.currentUser.uid
@@ -71,9 +73,7 @@ const Post = ({ item, navigation, authenticated }) => {
           </View>
           <View>
             <Text style={{ color: colors.text }}>
-              {moment(item.createAt.toDate().toString())
-                .startOf("hour")
-                .fromNow()}
+              {moment(date.toISOString()).startOf("hour").fromNow()}
             </Text>
           </View>
         </View>

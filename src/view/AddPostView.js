@@ -1,4 +1,4 @@
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useEffect } from "react";
 import {
   View,
   Image,
@@ -28,6 +28,7 @@ const AddPostView = ({ navigation, currentUser }) => {
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const { showActionSheetWithOptions } = useActionSheet();
+  const [disable, setDisable] = useState(true);
   let type = "posts";
   const { colors } = useTheme();
   const clearText = createRef();
@@ -51,9 +52,13 @@ const AddPostView = ({ navigation, currentUser }) => {
     setDescription("");
   };
 
+  useEffect(() => {
+    if (image !== null) setDisable(false);
+    else setDisable(true);
+  }, [image]);
+
   const addPost = (currentUser, post, setLoading) => {
-    setLoading(true);
-    if (currentUser !== null) {
+    if (currentUser !== null && image !== null) {
       onAddPost(currentUser, post, setLoading);
     }
     cancelPost();
@@ -134,6 +139,7 @@ const AddPostView = ({ navigation, currentUser }) => {
             text="Post"
             color="white"
             backgroundColor="#00C2FF"
+            disable={disable}
             onClick={() => addPost(currentUser.uid, post, setLoading)}
           />
           <CustomButton

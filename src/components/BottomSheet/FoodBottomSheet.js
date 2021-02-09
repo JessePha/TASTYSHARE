@@ -4,10 +4,12 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import BottomSheet from "reanimated-bottom-sheet";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 import { connect } from "react-redux";
 import { useTheme } from "@react-navigation/native";
 import { handleOnLike } from "../../handleLikesFollowsCommentsPosts/handleLikes";
+import { handleOnSave } from "../../handleLikesFollowsCommentsPosts/handleSave";
 import { appColors } from "../../shared/global/colors/colors";
 
 const FoodBottomSheet = ({
@@ -20,6 +22,7 @@ const FoodBottomSheet = ({
   setLike,
   comments,
   alertMessage,
+  savedPosts,
 }) => {
   const [countLikes, setCountLikes] = useState(item.likesCount);
   const { colors } = useTheme();
@@ -27,7 +30,6 @@ const FoodBottomSheet = ({
   const resultString = isTruncated
     ? item.description.slice(0, 100)
     : item.description;
-
 
   const onNavigate = (item) => {
     if (authenticated.currentUser) {
@@ -102,6 +104,21 @@ const FoodBottomSheet = ({
             color="gray"
             style={{ marginLeft: 10 }}
             onPress={() => bs1.current.snapTo(0)}
+          />
+          <FontAwesome
+            name={savedPosts.includes(item.postID) ? "bookmark" : "bookmark-o"}
+            size={20}
+            color="gray"
+            style={{ marginLeft: 10 }}
+            onPress={() =>
+              handleOnSave(
+                authenticated,
+                item.postID,
+                savedPosts,
+                bs,
+                alertMessage
+              )
+            }
           />
         </View>
       </View>

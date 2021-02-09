@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import MainView from "../../view/MainView";
 import ProfileView from "../../view/ProfileView";
 import FoodView from "../../view/FoodView";
+import SearchView from "../../view/SearchView";
 import LoadingScreen from "../../view/LoadingView";
 import { connect } from "react-redux";
 
@@ -24,6 +25,11 @@ const HomeStack = () => {
         options={() => ({
           headerShown: false,
         })}
+      />
+      <AuthStack.Screen
+        name="search"
+        component={SearchView}
+        options={{ headerShown: false }}
       />
       <AuthStack.Screen
         name="foodView"

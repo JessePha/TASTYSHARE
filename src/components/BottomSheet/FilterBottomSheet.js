@@ -53,13 +53,6 @@ const FilterBottomSheet = ({ bs, fall, posts, getAllPosts }) => {
       >
         <Text style={{ color: colors.text }}>Location</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          getAllPosts(posts), bs.current.snapTo(1);
-        }}
-      >
-        <Text style={{ color: colors.text }}>Default</Text>
-      </TouchableOpacity>
     </View>
   );
   return (

@@ -6,6 +6,7 @@ import SignUpView from "../view/RegisterView";
 import ProfileView from "../view/ProfileView";
 import FoodView from "../view/FoodView";
 import ForgetPasswordView from "../view/ForgetPasswordView";
+import SearchView from "../view/SearchView";
 import LoadingScreen from "../view/LoadingView";
 import Header from "../components/Header/Header";
 import TabNavigation from "./tabNavigation/TabNavigation";
@@ -13,7 +14,7 @@ import { connect } from "react-redux";
 
 const AuthStack = createStackNavigator();
 
-const HomeScreen = ({ authenticated}) => {
+const HomeScreen = ({ authenticated }) => {
   return (
     <AuthStack.Navigator
       screenOptions={{
@@ -42,6 +43,7 @@ const HomeScreen = ({ authenticated}) => {
               ),
             })}
           />
+          <AuthStack.Screen name="search" component={SearchView} />
           <AuthStack.Screen name="Log in" component={LogInView} />
           <AuthStack.Screen name="Register" component={SignUpView} />
           <AuthStack.Screen

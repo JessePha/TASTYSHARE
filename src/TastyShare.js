@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import HomeScreen from "./routes/HomeScreen";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
-import * as actionType from "./shared/global/globalstates/actions/actionTypes";
+import * as actionTypes from "./shared/global/globalstates/actions/actionTypes";
 import { auth } from "../config/config";
 import { connect } from "react-redux";
 import LoadingScreen from "./view/LoadingView";
@@ -16,13 +16,13 @@ import {
   DarkTheme as PaperDarkTheme,
 } from "react-native-paper";
 import { projectFirestore } from "../config/config";
+
 const TastyShare = ({
   authenticated,
   signIn,
   signOut,
   isDarkTheme,
 }) => {
-  
   const CustomDefaultTheme = {
     ...NavigationDefaultTheme,
     ...PaperDefaultTheme,
@@ -52,7 +52,7 @@ const TastyShare = ({
       iconBackgroundColor: "white",
     },
   };
-
+  
   const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
 
   useEffect(() => {
@@ -95,9 +95,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signIn: (user) => dispatch({ type: actionType.SIGN_IN, payload: user }),
-    signOut: () => dispatch({ type: actionType.SIGN_OUT }),
-    changeTheme: () => dispatch({ type: actionType.CHANGE_THEME, payload }),
+    signIn: (user) => dispatch({ type: actionTypes.SIGN_IN, payload: user }),
+    signOut: () => dispatch({ type: actionTypes.SIGN_OUT }),
+    changeTheme: () => dispatch({ type: actionTypes.CHANGE_THEME, payload }),
   };
 };
 

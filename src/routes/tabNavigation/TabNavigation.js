@@ -4,7 +4,6 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import AddPostView from "../../view/AddPostView";
 import HomeStack from "../homeStack/HomeStack";
 import { SettingStack } from "../homeStack/SettingStack";
-import { connect } from "react-redux";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -52,10 +51,4 @@ const TabNavigation = () => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    authenticated: state.auth.isSignedIn,
-  };
-};
-
-export default connect(mapStateToProps, null)(TabNavigation);
+export default TabNavigation;

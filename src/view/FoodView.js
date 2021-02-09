@@ -21,7 +21,12 @@ import { connect } from "react-redux";
 import PostImage from "../components/UI/PostImage";
 import { getLikes } from "../handleLikesFollowsCommentsPosts/handleLikes";
 
-const FoodView = ({ route, navigation, authenticated }) => {
+const FoodView = ({
+  route,
+  navigation,
+  authenticated,
+  savedPosts,
+}) => {
   const bs = createRef();
   const fall = new Animated.Value(1);
 
@@ -30,7 +35,6 @@ const FoodView = ({ route, navigation, authenticated }) => {
 
   const bs2 = createRef();
   const fall2 = new Animated.Value(1);
-
 
   const { item } = route.params;
   const [like, setLike] = useState(false);
@@ -67,8 +71,9 @@ const FoodView = ({ route, navigation, authenticated }) => {
             bs1={bs1}
             authenticated={authenticated}
             like={like}
-            setLike={() => setLike()}
+            setLike={setLike}
             alertMessage={alertMessage}
+            savedPosts = {savedPosts}
           />
           <BottomSheet bs={bs} fall={fall} navigation={navigation} />
           <CommentBottomSheet
@@ -126,6 +131,7 @@ const mapStateToProps = (state) => {
   return {
     authenticated: state.auth,
     likes: state.auth.likes,
+    savedPosts: state.auth.savedPosts,
   };
 };
 

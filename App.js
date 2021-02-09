@@ -9,28 +9,23 @@ import * as Location from "expo-location";
 
 function App() {
   const [content, setContent] = useState(<SplashScreen />);
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+        const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        wait(3000).then(() => setContent(<TastyShare />));
         return;
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      if (location) {
+        const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        wait(3000).then(() => setContent(<TastyShare />));
+      }
     })();
   }, []);
-  if (errorMsg) {
-    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    wait(3000).then(() => setContent(<TastyShare />));
-  } else if (location) {
-    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    wait(3000).then(() => setContent(<TastyShare />));
-  }
 
   return (
     <SafeAreaView style={styles.AndroidSafeArea}>

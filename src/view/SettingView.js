@@ -4,6 +4,7 @@ import { Switch, Drawer, TouchableRipple } from "react-native-paper";
 import { useTheme } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CustomBar from "../components/UI/CustomBar";
 import { auth } from "../../config/config";
 import { connect } from "react-redux";
@@ -11,7 +12,12 @@ import { useNavigation } from "@react-navigation/native";
 import * as actionTypes from "../shared/global/globalstates/actions/actionTypes";
 import LoadingScreen from "../view/LoadingView";
 
-const SettingView = ({ currentUser, currentTheme, changeTheme }) => {
+const SettingView = ({
+  currentUser,
+  currentTheme,
+  changeTheme,
+  authenticated,
+}) => {
   const { colors } = useTheme();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
@@ -26,34 +32,56 @@ const SettingView = ({ currentUser, currentTheme, changeTheme }) => {
   if (loading) {
     return <LoadingScreen />;
   }
-  
 
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <View style={styles.profileContainer}>
-          <CustomBar
-            text={`${currentUser.firstName} ${currentUser.lastName}`}
-            textColor={colors.text}
-            userIconHeight={85}
-            userIconWidth={85}
-            bgColor={colors.background}
-            height={2}
-            iconBgColor={colors.iconBackgroundColor}
-            image={
-              currentUser.imageuri ? (
-                <Image
-                  source={{ uri: currentUser.imageuri }}
-                  style={{ width: 80, height: 80, borderRadius: 40 }}
-                />
-              ) : (
-                <AntDesign name="user" size={40} color={colors.iconColor} />
-              )
-            }
-          />
-        </View>
-        <Drawer.Section></Drawer.Section>
+        <Drawer.Section style={{ flex: 1 }}>
+          <View style={styles.profileContainer}>
+            <CustomBar
+              text={`${currentUser.firstName} ${currentUser.lastName}`}
+              textColor={colors.text}
+              userIconHeight={85}
+              userIconWidth={85}
+              bgColor={colors.background}
+              height={2}
+              iconBgColor={colors.iconBackgroundColor}
+              image={
+                currentUser.imageuri ? (
+                  <Image
+                    source={{ uri: currentUser.imageuri }}
+                    style={{ width: 80, height: 80, borderRadius: 40 }}
+                  />
+                ) : (
+                  <AntDesign name="user" size={40} color={colors.iconColor} />
+                )
+              }
+            />
+          </View>
+        </Drawer.Section>
         <View style={styles.infoContainer}>
+          <Drawer.Section>
+            <TouchableOpacity onPress={() => navigation.navigate("savedpost")}>
+              <CustomBar
+                text="Saves"
+                textColor={colors.text}
+                bgColor={colors.background}
+                iconBgColor="lightgreen"
+                userIconHeight={40}
+                userIconWidth={40}
+                isAuth={authenticated}
+                isUser={currentUser}
+                icon={
+                  <MaterialIcons
+                    name="keyboard-arrow-right"
+                    size={24}
+                    color="gray"
+                  />
+                }
+                image={<AntDesign name="save" size={20} color="white" />}
+              />
+            </TouchableOpacity>
+          </Drawer.Section>
           <Drawer.Section>
             <TouchableOpacity
               onPress={() => navigation.navigate("userpost", {})}
@@ -65,14 +93,16 @@ const SettingView = ({ currentUser, currentTheme, changeTheme }) => {
                 iconBgColor="lightblue"
                 userIconHeight={40}
                 userIconWidth={40}
+                isAuth={authenticated}
+                isUser={currentUser}
                 icon={
                   <MaterialIcons
                     name="keyboard-arrow-right"
                     size={24}
-                    color="black"
+                    color="gray"
                   />
                 }
-                image={<AntDesign name="save" size={20} color="white" />}
+                image={<AntDesign name="switcher" size={20} color="white" />}
               />
             </TouchableOpacity>
           </Drawer.Section>
@@ -89,11 +119,13 @@ const SettingView = ({ currentUser, currentTheme, changeTheme }) => {
                 iconBgColor="#ff7b54"
                 userIconHeight={40}
                 userIconWidth={40}
+                isAuth={authenticated}
+                isUser={currentUser}
                 icon={
                   <MaterialIcons
                     name="keyboard-arrow-right"
                     size={24}
-                    color="black"
+                    color="gray"
                   />
                 }
                 image={<AntDesign name="setting" size={20} color="white" />}
@@ -137,11 +169,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileContainer: {
-    flex: 1,
+    flex: 2,
     justifyContent: "center",
   },
   infoContainer: {
-    flex: 2,
+    flex: 3,
     justifyContent: "center",
   },
   logoutContainer: {
@@ -160,6 +192,7 @@ const mapStateToProps = (state) => {
   return {
     currentUser: state.auth.currentUser,
     currentTheme: state.auth.theme,
+    authenticated: state.auth.isSignedIn,
   };
 };
 

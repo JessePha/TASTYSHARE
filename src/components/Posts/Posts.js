@@ -4,7 +4,6 @@ import { View, FlatList } from "react-native";
 const Posts = ({
   navigation,
   posts,
-  setModalVisible,
   authenticated,
   onRefresh,
   refreshing,
@@ -22,7 +21,6 @@ const Posts = ({
             <Post
               item={item}
               navigation={navigation}
-              setModalVisible={setModalVisible}
               authenticated={authenticated}
             />
           )}

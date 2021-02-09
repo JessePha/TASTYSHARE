@@ -14,7 +14,6 @@ const uploadImage = async (image, currentUser, type) => {
 };
 const openImageLibrary = async (setImage, currentUser, type) => {
   const result = await cameraAndImageHelper.openImageLibrary();
-  setImage(result.uri);
   if (result) {
     const downloadUrl = await uploadImage(result, currentUser, type);
     setImage(downloadUrl);

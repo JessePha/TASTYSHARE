@@ -8,6 +8,7 @@ const initialState = {
   following: [],
   likes: [],
   comments: [],
+  savedPosts: [],
   theme: false,
   refresh: false,
 };
@@ -30,6 +31,9 @@ const auth = (state = initialState, action) => {
         isLoading: false,
         following: [],
         likes: [],
+        comments: [],
+        savedPosts: [],
+        theme: false,
       });
     case actionTypes.IS_LOADING:
       return updateObject(state, { ...state, isLoading: action.payload });
@@ -50,6 +54,9 @@ const auth = (state = initialState, action) => {
         ...state,
         comments: comments,
       });
+    case actionTypes.GET_SAVED_POST:
+      const savedPosts = action.payload.slice();
+      return updateObject(state, { ...state, savedPosts: savedPosts });
     case actionTypes.CHANGE_THEME:
       return updateObject(state, {
         ...state,

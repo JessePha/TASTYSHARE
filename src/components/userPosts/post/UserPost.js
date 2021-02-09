@@ -14,6 +14,9 @@ import { connect } from "react-redux";
 import * as actionTypes from "../../../shared/global/globalstates/actions/actionTypes";
 
 const UserPost = ({ item, onDelete, onEdit, deletePost, alertMessage }) => {
+  const miliseconds =
+    item.createAt.seconds * 1000 + item.createAt.nanoseconds / 1000000;
+  const date = new Date(miliseconds);
   const { colors } = useTheme();
 
   const deleteF = (userID, postID, deletePost, alertMessage) => {
@@ -114,8 +117,7 @@ const UserPost = ({ item, onDelete, onEdit, deletePost, alertMessage }) => {
               </Text>
             )}
             <Text style={{ color: colors.text }}>
-              {item.createAt &&
-                moment(item.createAt.toDate().toString()).calendar()}
+              {item.createAt && moment(date.toISOString()).calendar()}
             </Text>
           </View>
         </View>
@@ -130,7 +132,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-evenly",
-    borderWidth: 1,
     padding: 10,
     marginBottom: 10,
   },

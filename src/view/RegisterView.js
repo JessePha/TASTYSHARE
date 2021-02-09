@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  StyleSheet,
 } from "react-native";
 import CustomeText from "../components/UI/CustomText";
 import CustomeInput from "../components/UI/CustomInput";
@@ -109,29 +110,12 @@ const RegisterView = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={{
-        flexGrow: 1,
-      }}
+      style={styles.container}
     >
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss}>
-        <View
-          style={{
-            flexGrow: 1,
-            paddingLeft: 35,
-            paddingRight: 35,
-            backgroundColor: "#5A595B",
-          }}
-        >
-          <View style={{ flex: 1 }}>
-            <View
-              style={{
-                paddingTop: 30,
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+        <View style={styles.innerContainer}>
+          <View style={{ flex: 1, marginTop: 20 }}>
+            <View style={styles.logoContainer}>
               <CustomeText text="Sign up to" />
               <TextLogo size={30} />
             </View>
@@ -179,5 +163,24 @@ const RegisterView = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+  },
+  innerContainer: {
+    flexGrow: 1,
+    paddingLeft: 35,
+    paddingRight: 35,
+    backgroundColor: "#5A595B",
+  },
+  logoContainer: {
+    paddingTop: 30,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default RegisterView;

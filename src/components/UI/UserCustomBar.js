@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   userImageContainer: {
-    width: 140,
-    height: 140,
+    width: 135,
+    height: 135,
     borderRadius: 150 / 2,
     justifyContent: "center",
     alignItems: "center",

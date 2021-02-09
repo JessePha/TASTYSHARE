@@ -2,7 +2,7 @@ import React from "react";
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { appColors } from "../../shared/global/colors/colors";
 
-const Button = ({ text, onClick, color, backgroundColor }) => {
+const Button = ({ text, onClick, color, backgroundColor, disable }) => {
   let style = null;
   if (text === "Like") {
     style = styles.likeText;
@@ -24,9 +24,17 @@ const Button = ({ text, onClick, color, backgroundColor }) => {
     style = styles.appButtonText;
   }
   return (
-    <TouchableOpacity style={styles.appButtonContainer} onPress={onClick}>
+    <TouchableOpacity
+      disabled={disable}
+      style={styles.appButtonContainer}
+      onPress={onClick}
+    >
       <Text
-        style={{ ...style, color: color, backgroundColor: backgroundColor }}
+        style={{
+          ...style,
+          color: color,
+          backgroundColor: disable ? "darkgray": backgroundColor,
+        }}
       >
         {text}
       </Text>
