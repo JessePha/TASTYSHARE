@@ -39,7 +39,6 @@ const CustomInput = ({
             underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
-            ref={createRef}
           />
         );
       case "Lastname":
@@ -145,6 +144,7 @@ const CustomInput = ({
             underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
+            ref={createRef}
           />
         );
     }

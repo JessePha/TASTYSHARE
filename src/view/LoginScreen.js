@@ -9,15 +9,15 @@ import {
 import CustomInput from "../components/UI/CustomInput";
 import CustomButton from "../components/UI/CustomButton";
 import CustomLinkText from "../components/UI/CustomLinkText";
-import LoadingScreen from "../view/LoadingView";
+import LoadingScreen from "../view/LoadingScreen";
 import Logo from "../components/UI/Logo";
-import { isValidEmail, isValidPassword } from "../handleValidtion/validation";
+import { isValidEmail, isValidPasswordLogin } from "../handleValidtion/validation";
 import { auth } from "../../config/config";
 import { appColors } from "../shared/global/colors/colors";
 import { connect } from "react-redux";
 import * as actionTypes from "../shared/global/globalstates/actions/actionTypes";
 
-const LoginView = ({ navigation, isLoading, checkLoading }) => {
+const LoginScreen = ({ navigation, isLoading, checkLoading }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -43,7 +43,7 @@ const LoginView = ({ navigation, isLoading, checkLoading }) => {
 
   const onSignIn = async () => {
     const validEmail = isValidEmail(email);
-    const validPassword = isValidPassword(password);
+    const validPassword = isValidPasswordLogin(password);
     setMsg([{ ...validEmail }, { ...validPassword }]);
     if (validEmail.isValid && validPassword.isValid) {
       checkLoading(true);
@@ -178,4 +178,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginView);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

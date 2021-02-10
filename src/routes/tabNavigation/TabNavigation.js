@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import AddPostView from "../../view/AddPostView";
+import AddPostScreen from "../../view/AddPostScreen";
 import HomeStack from "../homeStack/HomeStack";
 import { SettingStack } from "../homeStack/SettingStack";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -30,7 +30,7 @@ const TabNavigation = () => {
       />
       <tabsNavigation.Screen
         name="addpost"
-        component={AddPostView}
+        component={AddPostScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="add-circle" size={25} color={color} />

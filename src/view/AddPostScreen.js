@@ -17,9 +17,9 @@ import { addImage } from "../handleCamera/handleCamera";
 import { useTheme } from "@react-navigation/native";
 import firebase from "firebase";
 import { onAddPost } from "../handleLikesFollowsCommentsPosts/handlePost";
-import LoadingScreen from "../view/LoadingView";
+import LoadingScreen from "../view/LoadingScreen";
 
-const AddPostView = ({ navigation, currentUser }) => {
+const AddPostScreen = ({ navigation, currentUser }) => {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
@@ -32,6 +32,10 @@ const AddPostView = ({ navigation, currentUser }) => {
   let type = "posts";
   const { colors } = useTheme();
   const clearText = createRef();
+  const clearText1 = createRef();
+  const clearText2 = createRef();
+  const clearText3 = createRef();
+  const clearText4 = createRef();
   const post = {
     title: title.trim(),
     price: price.trim(),
@@ -42,14 +46,6 @@ const AddPostView = ({ navigation, currentUser }) => {
     imageuri: image,
     likesCount: 0,
     createAt: firebase.firestore.FieldValue.serverTimestamp(),
-  };
-
-  const resetForm = () => {
-    setImage(null);
-    setTitle("");
-    setPrice("");
-    setCategory("");
-    setDescription("");
   };
 
   useEffect(() => {
@@ -64,10 +60,17 @@ const AddPostView = ({ navigation, currentUser }) => {
     cancelPost();
   };
 
+  const resetForm = () => {
+    clearText.current.clear();
+    clearText1.current.clear();
+    clearText2.current.clear();
+    clearText3.current.clear();
+    clearText4.current.clear();
+  };
+
   const cancelPost = () => {
     setImage(null);
     resetForm();
-    clearText.current.clear();
     navigation.navigate("Home");
   };
 
@@ -109,28 +112,28 @@ const AddPostView = ({ navigation, currentUser }) => {
               text="Price"
               handleInput={setPrice}
               textColor={colors.text}
-              createRef={clearText}
+              createRef={clearText1}
             />
             <CustomTextInput
               space={10}
               text="Category"
               handleInput={setCategory}
               textColor={colors.text}
-              createRef={clearText}
+              createRef={clearText2}
             />
             <CustomTextInput
               space={10}
               text="Location"
               handleInput={setLocation}
               textColor={colors.text}
-              createRef={clearText}
+              createRef={clearText3}
             />
             <CustomTextInput
               space={10}
               text="Description"
               handleInput={setDescription}
               textColor={colors.text}
-              createRef={clearText}
+              createRef={clearText4}
             />
           </ScrollView>
         </View>
@@ -186,4 +189,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(AddPostView);
+export default connect(mapStateToProps, null)(AddPostScreen);

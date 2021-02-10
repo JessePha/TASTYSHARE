@@ -22,7 +22,7 @@ import { fetchFollowers } from "../handleLikesFollowsCommentsPosts/handleFollow"
 import { search } from "../handleSearch/handleSearch";
 import { getSavedPosts } from "../handleLikesFollowsCommentsPosts/handleSave";
 
-const MainView = ({
+const MainScreen = ({
   navigation,
   getAllPosts,
   posts,
@@ -86,7 +86,7 @@ const MainView = ({
     if (authenticated.currentUser) {
       getSavedPosts(authenticated.currentUser.uid, fetchSavedPosts);
     }
-  }, [authenticated.isSignedIn]);
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -178,4 +178,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

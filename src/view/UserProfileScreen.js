@@ -6,7 +6,7 @@ import CustomBar from "../components/UI/CustomBar";
 import UserPosts from "../components/userPosts/UserPosts";
 import { AntDesign } from "@expo/vector-icons";
 
-const UserProfileView = ({ allPosts, navigation, authenticated, route }) => {
+const UserProfileScreen = ({ allPosts, navigation, authenticated, route }) => {
   const { colors } = useTheme();
   const { item } = route.params;
   const [showMessage, setShowMessage] = useState(false);
@@ -143,4 +143,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(UserProfileView);
+export default connect(mapStateToProps, null)(UserProfileScreen);

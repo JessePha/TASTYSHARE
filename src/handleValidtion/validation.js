@@ -13,10 +13,20 @@ export const isValidEmail = (value) => {
     else return { isValid: false, msg: "Invalid email address" };
   } else return { isValid: false, msg: "Please enter your email" };
 };
-export const isValidPassword = (value) => {
+export const isValidPasswordRegister = (value) => {
   const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
   if (value) {
     if (reg.test(value.trim())) return { isValid: true, msg: "" };
-    else return { isValid: false, msg: "Invalid password" };
+    else
+      return {
+        isValid: false,
+        msg:
+          "Your password should contain atleast a capital letter, small letter and numbers",
+      };
+  } else return { isValid: false, msg: "Please enter your password" };
+};
+export const isValidPasswordLogin = (value) => {
+  if (value) {
+    return { isValid: true, msg: "" };
   } else return { isValid: false, msg: "Please enter your password" };
 };

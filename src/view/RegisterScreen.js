@@ -16,12 +16,12 @@ import {
   isValidfName,
   isValidlName,
   isValidEmail,
-  isValidPassword,
+  isValidPasswordRegister,
 } from "../handleValidtion/validation";
 import { auth, projectFirestore } from "../../config/config";
-import LoadingScreen from "../view/LoadingView";
+import LoadingScreen from "../view/LoadingScreen";
 
-const RegisterView = ({ navigation }) => {
+const RegisterScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastName] = useState("");
@@ -66,7 +66,7 @@ const RegisterView = ({ navigation }) => {
     const validfName = isValidfName(firstname);
     const validlName = isValidlName(lastname);
     const validEmail = isValidEmail(email);
-    const validPassword = isValidPassword(password);
+    const validPassword = isValidPasswordRegister(password);
     setMsg([
       { ...validfName },
       { ...validlName },
@@ -183,4 +183,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegisterView;
+export default RegisterScreen;

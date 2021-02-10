@@ -3,7 +3,7 @@ import { View, Text, FlatList } from "react-native";
 import Post from "../components/Posts/Post/Post";
 import { useTheme } from "@react-navigation/native";
 
-const SearchView = ({ route, navigation }) => {
+const SearchScreen = ({ route, navigation }) => {
   const { data, authenticated } = route.params;
   const { colors } = useTheme();
   return data.length > 0 ? (
@@ -27,4 +27,4 @@ const SearchView = ({ route, navigation }) => {
   );
 };
 
-export default SearchView;
+export default SearchScreen;

@@ -1,13 +1,13 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import LogInView from "../view/LoginView";
-import MainView from "../view/MainView";
-import SignUpView from "../view/RegisterView";
-import ProfileView from "../view/ProfileView";
-import FoodView from "../view/FoodView";
-import ForgetPasswordView from "../view/ForgetPasswordView";
-import SearchView from "../view/SearchView";
-import LoadingScreen from "../view/LoadingView";
+import LoginScreen from "../view/LoginScreen";
+import MainScreen from "../view/MainScreen";
+import RegisterScreen from "../view/RegisterScreen";
+import ProfileScreen from "../view/ProfileScreen";
+import FoodScreen from "../view/FoodScreen";
+import ForgetPasswordScreen from "../view/ForgetPasswordScreen";
+import SearchScreen from "../view/SearchScreen";
+import LoadingScreen from "../view/LoadingScreen";
 import Header from "../components/Header/Header";
 import TabNavigation from "./tabNavigation/TabNavigation";
 import { connect } from "react-redux";
@@ -35,7 +35,7 @@ const HomeScreen = ({ authenticated }) => {
         <>
           <AuthStack.Screen
             name="Default"
-            component={MainView}
+            component={MainScreen}
             options={({ navigation }) => ({
               headerShown: authenticated ? false : true,
               headerTitle: () => (
@@ -43,21 +43,21 @@ const HomeScreen = ({ authenticated }) => {
               ),
             })}
           />
-          <AuthStack.Screen name="search" component={SearchView} />
-          <AuthStack.Screen name="Log in" component={LogInView} />
-          <AuthStack.Screen name="Register" component={SignUpView} />
+          <AuthStack.Screen name="search" component={SearchScreen} />
+          <AuthStack.Screen name="Log in" component={LoginScreen} />
+          <AuthStack.Screen name="Register" component={RegisterScreen} />
           <AuthStack.Screen
             name="forgetPassword"
-            component={ForgetPasswordView}
+            component={ForgetPasswordScreen}
           />
           <AuthStack.Screen
             name="foodView"
-            component={FoodView}
+            component={FoodScreen}
             options={{ headerShown: false }}
           />
           <AuthStack.Screen
             name="userProfile"
-            component={ProfileView}
+            component={ProfileScreen}
             options={{ headerShown: false }}
           />
           <AuthStack.Screen name="loading" component={LoadingScreen} />

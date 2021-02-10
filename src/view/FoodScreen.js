@@ -21,7 +21,7 @@ import { connect } from "react-redux";
 import PostImage from "../components/UI/PostImage";
 import { getLikes } from "../handleLikesFollowsCommentsPosts/handleLikes";
 
-const FoodView = ({
+const FoodScreen = ({
   route,
   navigation,
   authenticated,
@@ -135,4 +135,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(FoodView);
+export default connect(mapStateToProps, null)(FoodScreen);

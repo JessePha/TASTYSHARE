@@ -4,15 +4,14 @@ import { Switch, Drawer, TouchableRipple } from "react-native-paper";
 import { useTheme } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CustomBar from "../components/UI/CustomBar";
 import { auth } from "../../config/config";
 import { connect } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import * as actionTypes from "../shared/global/globalstates/actions/actionTypes";
-import LoadingScreen from "../view/LoadingView";
+import LoadingScreen from "./LoadingScreen";
 
-const SettingView = ({
+const SettingScreen = ({
   currentUser,
   currentTheme,
   changeTheme,
@@ -203,4 +202,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingView);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingScreen);

@@ -14,7 +14,7 @@ import {
 import * as actionTypes from "../shared/global/globalstates/actions/actionTypes";
 import { AntDesign } from "@expo/vector-icons";
 
-const ProfileView = ({
+const ProfileScreen = ({
   route,
   allPosts,
   navigation,
@@ -177,4 +177,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileView);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

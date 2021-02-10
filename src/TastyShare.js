@@ -4,7 +4,7 @@ import { connectActionSheet } from "@expo/react-native-action-sheet";
 import * as actionTypes from "./shared/global/globalstates/actions/actionTypes";
 import { auth } from "../config/config";
 import { connect } from "react-redux";
-import LoadingScreen from "./view/LoadingView";
+import LoadingScreen from "./view/LoadingScreen";
 import {
   NavigationContainer,
   DefaultTheme as NavigationDefaultTheme,

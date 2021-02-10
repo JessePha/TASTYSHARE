@@ -1,10 +1,10 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import MainView from "../../view/MainView";
-import ProfileView from "../../view/ProfileView";
-import FoodView from "../../view/FoodView";
-import SearchView from "../../view/SearchView";
-import LoadingScreen from "../../view/LoadingView";
+import MainScreen from "../../view/MainScreen";
+import ProfileScreen from "../../view/ProfileScreen";
+import FoodScreen from "../../view/FoodScreen";
+import SearchScreen from "../../view/SearchScreen";
+import LoadingScreen from "../../view/LoadingScreen";
 import { connect } from "react-redux";
 
 const AuthStack = createStackNavigator();
@@ -21,24 +21,24 @@ const HomeStack = () => {
     >
       <AuthStack.Screen
         name="Main"
-        component={MainView}
+        component={MainScreen}
         options={() => ({
           headerShown: false,
         })}
       />
       <AuthStack.Screen
         name="search"
-        component={SearchView}
+        component={SearchScreen}
         options={{ headerShown: false }}
       />
       <AuthStack.Screen
         name="foodView"
-        component={FoodView}
+        component={FoodScreen}
         options={{ headerShown: false }}
       />
       <AuthStack.Screen
         name="userProfile"
-        component={ProfileView}
+        component={ProfileScreen}
         options={{ headerShown: false }}
       />
       <AuthStack.Screen name="loading" component={LoadingScreen} />

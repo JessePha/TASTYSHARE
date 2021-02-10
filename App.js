@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import TastyShare from "./src/TastyShare";
 import store from "./src/shared/global/globalstates/store";
-import SplashScreen from "./src/view/SplashView";
+import SplashScreen from "./src/view/SplashScreen";
 import * as Location from "expo-location";
 
 function App() {

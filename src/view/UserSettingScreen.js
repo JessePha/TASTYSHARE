@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, createRef } from "react";
 import {
   View,
   Image,
@@ -16,7 +16,7 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { addImage } from "../handleCamera/handleCamera";
 import { projectFirestore } from "../../config/config";
 
-const UserSettingView = ({ navigation, route }) => {
+const UserSettingScreen = ({ navigation, route }) => {
   const { currentUser } = route.params;
   const [image, setImage] = useState(currentUser.imageuri);
   const { showActionSheetWithOptions } = useActionSheet();
@@ -142,4 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserSettingView;
+export default UserSettingScreen;

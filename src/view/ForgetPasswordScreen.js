@@ -14,7 +14,7 @@ import { auth } from "../../config/config";
 import { appColors } from "../shared/global/colors/colors";
 import { isValidEmail } from "../handleValidtion/validation";
 
-const ForgetPasswordView = ({ navigation }) => {
+const ForgetPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
 });
-export default ForgetPasswordView;
+export default ForgetPasswordScreen;

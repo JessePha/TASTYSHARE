@@ -101,9 +101,6 @@ const UserPost = ({ item, onDelete, onEdit, deletePost, alertMessage }) => {
                 No Title
               </Text>
             )}
-            {item.price ? (
-              <Text style={{ color: colors.text }}>{item.price}</Text>
-            ) : null}
             {item.description !== "" ? (
               <Text
                 numberOfLines={4}
