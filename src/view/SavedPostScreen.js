@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { connect } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
-import SavedPost from "../components/savedPost/SavedPost";
+import SavedPost from "../components/SavedPost/SavedPost";
 
 const SavedPostScreen = ({ navigation, savedPostIDs, posts }) => {
   const savedPosts = posts.filter((post) => savedPostIDs.includes(post.postID));
