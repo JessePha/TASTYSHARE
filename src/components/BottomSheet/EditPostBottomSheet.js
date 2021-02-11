@@ -3,8 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableWithoutFeedback,
-  Keyboard,
   Dimensions,
   Image,
   ScrollView,
@@ -19,7 +17,18 @@ import { addImage } from "../../handleCamera/handleCamera";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { appColors } from "../../shared/global/colors/colors";
 
-const bottomSheet = ({ bs, fall, postInfo, edit }) => {
+const bottomSheet = ({
+  bs,
+  fall,
+  postInfo,
+  edit,
+  resetForm,
+  clearText,
+  clearText1,
+  clearText2,
+  clearText3,
+  clearText4,
+}) => {
   const { colors } = useTheme();
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
@@ -39,95 +48,96 @@ const bottomSheet = ({ bs, fall, postInfo, edit }) => {
     imageuri: image,
   };
 
+  const onCancel = () => {
+    resetForm();
+    bs.current.snapTo(1);
+  };
+
   const content = () => (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View
-          style={{ ...styles.container, backgroundColor: colors.background }}
+      <View style={{ ...styles.container, backgroundColor: colors.background }}>
+        <TouchableOpacity
+          style={styles.imageContainer}
+          onPress={() =>
+            addImage(showActionSheetWithOptions, setImage, postInfo.user, type)
+          }
         >
-          <TouchableOpacity
-            style={styles.imageContainer}
-            onPress={() =>
-              addImage(
-                showActionSheetWithOptions,
-                setImage,
-                postInfo.user,
-                type
-              )
-            }
+          <View
+            style={{
+              ...styles.imageInnerContainer,
+              backgroundColor: colors.background,
+              borderColor: colors.border,
+            }}
           >
-            <View
-              style={{
-                ...styles.imageInnerContainer,
-                backgroundColor: colors.background,
-                borderColor: colors.border,
-              }}
-            >
-              {image ? (
-                <Image source={{ uri: image, width: 140, height: 140 }} />
-              ) : (
-                <AntDesign name="camera" color={colors.text} size={50} />
-              )}
-            </View>
-          </TouchableOpacity>
-          <View style={styles.inputContainer}>
-            <ScrollView>
-              <CustomTextInput
-                space={10}
-                text="Title"
-                handleInput={setTitle}
-                textColor={colors.text}
-              />
-              <CustomTextInput
-                space={10}
-                text="Price"
-                handleInput={setPrice}
-                textColor={colors.text}
-              />
-              <CustomTextInput
-                space={10}
-                text="Category"
-                handleInput={setCategory}
-                textColor={colors.text}
-              />
-              <CustomTextInput
-                space={10}
-                text="Description"
-                handleInput={setDescription}
-                textColor={colors.text}
-              />
-              <CustomTextInput
-                text="Location"
-                handleInput={setLocation}
-                textColor={colors.text}
-              />
-            </ScrollView>
+            {image ? (
+              <Image source={{ uri: image, width: 140, height: 140 }} />
+            ) : (
+              <AntDesign name="camera" color={colors.text} size={50} />
+            )}
           </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => edit(updatePost)}
-            >
-              <Text style={styles.text}>Edit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.cancelButton}
-              onPress={() => bs.current.snapTo(1)}
-            >
-              <Text style={styles.text}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
+        </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <ScrollView>
+            <CustomTextInput
+              space={10}
+              text="Title"
+              handleInput={setTitle}
+              textColor={colors.text}
+              createRef={clearText}
+            />
+            <CustomTextInput
+              space={10}
+              text="Price"
+              handleInput={setPrice}
+              textColor={colors.text}
+              createRef={clearText1}
+            />
+            <CustomTextInput
+              space={10}
+              text="Category"
+              handleInput={setCategory}
+              textColor={colors.text}
+              createRef={clearText2}
+            />
+            <CustomTextInput
+              space={10}
+              text="Description"
+              handleInput={setDescription}
+              textColor={colors.text}
+              createRef={clearText3}
+            />
+            <CustomTextInput
+              text="Location"
+              handleInput={setLocation}
+              textColor={colors.text}
+              createRef={clearText4}
+            />
+          </ScrollView>
         </View>
-      </TouchableWithoutFeedback>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => edit(updatePost)}
+          >
+            <Text style={styles.text}>Edit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => onCancel()}
+          >
+            <Text style={styles.text}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </KeyboardAvoidingView>
   );
   return (
     <>
       <BottomSheet
         ref={bs}
-        snapPoints={["85%", 0]}
+        snapPoints={["95%", 0]}
         renderContent={content}
         initialSnap={1}
         callbackNode={fall}
@@ -167,7 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: "darkgray",
   },
   imageContainer: {
-    height: 250,
+    height: 330,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -180,15 +190,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   inputContainer: {
-    height: 400,
+    height: 350,
     justifyContent: "center",
     paddingLeft: 20,
     paddingRight: 20,
-    
   },
   buttonContainer: {
     justifyContent: "center",
     alignItems: "center",
+    height: 70,
   },
   editButton: {
     padding: 10,

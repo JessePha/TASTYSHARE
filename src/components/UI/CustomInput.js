@@ -36,7 +36,6 @@ const CustomInput = ({
             placeholder={text}
             maxLength={15}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
           />
@@ -47,7 +46,6 @@ const CustomInput = ({
             placeholder={text}
             maxLength={15}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
           />
@@ -58,7 +56,6 @@ const CustomInput = ({
             placeholder={text}
             maxLength={50}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
           />
@@ -69,7 +66,6 @@ const CustomInput = ({
             secureTextEntry={showPassword}
             placeholder={text}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
           />
@@ -80,7 +76,6 @@ const CustomInput = ({
             maxLength={50}
             placeholder={text}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
             ref={createRef}
@@ -92,7 +87,6 @@ const CustomInput = ({
             maxLength={20}
             placeholder={text}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
             ref={createRef}
@@ -104,7 +98,6 @@ const CustomInput = ({
             maxLength={30}
             placeholder={text}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
             ref={createRef}
@@ -117,8 +110,10 @@ const CustomInput = ({
             numberOfLines={10}
             placeholder={text}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
-            style={{ ...styles.textInput, color: textColor }}
+            style={{
+              ...styles.textInput,
+              color: textColor,
+            }}
             onChangeText={(input) => handleInput(input.trim())}
             ref={createRef}
           />
@@ -129,7 +124,6 @@ const CustomInput = ({
             maxLength={50}
             placeholder={text}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
             ref={createRef}
@@ -141,7 +135,6 @@ const CustomInput = ({
             multiline
             placeholder={text}
             placeholderTextColor={appColors.inputPlaceHolderColor}
-            underlineColorAndroid={appColors.underlineColorAndroid}
             style={{ ...styles.textInput, color: textColor }}
             onChangeText={(input) => handleInput(input.trim())}
             ref={createRef}
@@ -165,6 +158,8 @@ const styles = StyleSheet.create({
   textInput: {
     height: 40,
     paddingLeft: 6,
+    borderBottomColor: appColors.underlineColorAndroid,
+    borderBottomWidth: 1,
   },
   eyeIcon: {
     fontSize: 20,
