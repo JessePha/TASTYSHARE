@@ -188,6 +188,15 @@ const FoodBottomSheet = ({
             </TouchableOpacity>
           </ScrollView>
         </View>
+        <MapView style={styles.map} initialRegion={initialRegion}>
+          <Marker
+            coordinate={{
+              latitude: initialRegion.latitude,
+              longitude: initialRegion.longitude,
+            }}
+            title={`${item.location}`}
+          ></Marker>
+        </MapView>
       </View>
     </View>
   );
@@ -252,6 +261,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   userName: { marginLeft: 10 },
+  map: {
+    width: Dimensions.get("screen").width,
+    height: 250,
+    marginTop: 20,
+  },
 });
 
 const mapStateToProps = (state) => {
