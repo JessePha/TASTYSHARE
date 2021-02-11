@@ -188,22 +188,6 @@ const FoodBottomSheet = ({
             </TouchableOpacity>
           </ScrollView>
         </View>
-        <View
-          style={{ marginTop: 20, backgroundColor: colors.background, height: 250 }}
-        >
-          <MapView
-            style={StyleSheet.absoluteFill}
-            initialRegion={initialRegion}
-          >
-            <Marker
-              coordinate={{
-                latitude: initialRegion.latitude,
-                longitude: initialRegion.longitude,
-              }}
-              title={`${item.location}`}
-            ></Marker>
-          </MapView>
-        </View>
       </View>
     </View>
   );
@@ -268,10 +252,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   userName: { marginLeft: 10 },
-  map: {
-    width: Dimensions.get("screen").width,
-    height: 250,
-  },
 });
 
 const mapStateToProps = (state) => {
