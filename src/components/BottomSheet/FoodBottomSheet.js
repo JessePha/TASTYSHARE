@@ -188,7 +188,7 @@ const FoodBottomSheet = ({
             </TouchableOpacity>
           </ScrollView>
         </View>
-        <MapView style={styles.map} initialRegion={initialRegion}>
+        <MapView style={styles.map} region={initialRegion}>
           <Marker
             coordinate={{
               latitude: initialRegion.latitude,
