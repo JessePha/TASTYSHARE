@@ -188,16 +188,25 @@ const FoodBottomSheet = ({
             </TouchableOpacity>
           </ScrollView>
         </View>
-        <MapView style={styles.map} region={initialRegion}>
-          <Marker
-            coordinate={{
-              latitude: initialRegion.latitude,
-              longitude: initialRegion.longitude,
-            }}
-            title={`${item.location}`}
-          ></Marker>
-        </MapView>
       </View>
+      {
+        <View
+          style={{ flex: 5, marginTop: 10, backgroundColor: colors.background }}
+        >
+          <MapView
+            style={StyleSheet.absoluteFill}
+            initialRegion={initialRegion}
+          >
+            <Marker
+              coordinate={{
+                latitude: initialRegion.latitude,
+                longitude: initialRegion.longitude,
+              }}
+              title={`${item.location}`}
+            ></Marker>
+          </MapView>
+        </View>
+      }
     </View>
   );
   return (
